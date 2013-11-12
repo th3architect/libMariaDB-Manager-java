@@ -304,12 +304,13 @@ public class GsonLatestObservations {
 			SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 			String now = sdf.format(new Date());
 			Iterator<GsonMonitorClasses.MonitorClasses> it = monitorObj.getMonitorClasses().iterator();
+			m_monitor.clear();
 			while (it.hasNext()) {
 				GsonMonitorClasses.MonitorClasses monitorTmp = it.next();
 				Integer monitorID = monitorTmp.getMonitorId();
 				m_monitor.put(monitorID, monitorTmp);
-				m_monitorDates = now;
 			}
+			m_monitorDates = now;
 		} catch (Exception e) {
 			// IGNORE
 		}
