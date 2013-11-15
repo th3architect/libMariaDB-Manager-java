@@ -96,7 +96,7 @@ public class monAPI {
 		m_cycles = 0;
 	}
 	/**
-	 * Populate a monitor value for the system.
+	 * Populate a monitor value for the system. Sends a POST request.
 	 * 
 	 * @param systemID		The ID of the System
 	 * @param monitorKey	The key of the monitor itself
@@ -108,7 +108,7 @@ public class monAPI {
 		return restPost(apiRequest, new String[] {"value"}, new String[] {value});
 	}
 	/**
-	 * Bulk update API.
+	 * Bulk update API. POST request.
 	 * 
 	 * @param apiRequest	the request uri
 	 * @param fields
@@ -120,8 +120,8 @@ public class monAPI {
 	}
 	
 	/**
-	 * DEPRECATED.
-	 * API call which requires to modify something.
+	 * @deprecated
+	 * API call which requires to modify something. Sends a PUT request.
 	 * 
 	 * @param restRequest
 	 * @param pName
@@ -137,7 +137,7 @@ public class monAPI {
 	}
 	
 	/**
-	 * API call which requires to modify something.
+	 * API call which requires to modify something. Sends a PUT request.
 	 * 
 	 * @param restRequest	the API URI
 	 * @param pName			an array with the names of the parameters
@@ -242,7 +242,7 @@ public class monAPI {
 	}
 	
 	/**
-	 * Send a PUT request to the API
+	 * Send a PUT request to the API.
 	 * 
 	 * @param restRequest	The URL, excluding the fixed stem
 	 * @param pName[]		The parameter names for the GET request
@@ -292,7 +292,7 @@ public class monAPI {
 	}
 
 	/**
-	 * Send a POST request to the API
+	 * Send a POST request to the API.
 	 * 
 	 * @param restRequest	The URL, excluding the fixed stem
 	 * @param pName			The parameter names for the post request
