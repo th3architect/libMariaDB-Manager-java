@@ -13,7 +13,7 @@
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Copyright SkySQL Ab
+ * Copyright 2012-2014 SkySQL Ab
  */
 
 package com.skysql.java;
@@ -123,10 +123,10 @@ public class monAPI {
 	 * @deprecated
 	 * API call which requires to modify something. Sends a PUT request.
 	 * 
-	 * @param restRequest
-	 * @param pName
-	 * @param pValue
-	 * @return
+	 * @param restRequest	the API URI
+	 * @param pName			the name of the parameter
+	 * @param pValue		the value of the parameter
+	 * @return				true on success, false otherwise
 	 */
 	public boolean UpdateValue(String restRequest, String pName, String pValue) {
 		String[] newpName = {pName};
