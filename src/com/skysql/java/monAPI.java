@@ -23,20 +23,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.lang.reflect.Method;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The interface to the SkySQL Manager API, a REST interface to the monitor database.
@@ -71,27 +71,52 @@ public class monAPI {
 	 * Timezone read from the php configuration. Assume /etc/php.ini, default to Europe/London.
 	 */
 	private String		m_timeZone = null;
-	
+
 	/**
-	 * Construct the monAPI instance. This consists of obtaining the information required
+	 * Constructs the monAPI instance. This consists of obtaining the information required
 	 * to contact the API. This information is available via Java System Properties.
-	 * Set the buffering to true by default.
+	 * Sets the buffering to true by default, and the key ID to 1.
 	 */
 	public monAPI()
 	{
-		this(true);
+		this(true, 1);
 	}
 	/**
-	 * Construct the monAPI instance. This consists of obtaining the information required
+	 * Constructs the monAPI instance. This consists of obtaining the information required
 	 * to contact the API. This information is available via Java System Properties.
 	 *
 	 * @param buffer		true if buffer is active (default).
+	 * @param APIKeyId		the API key ID of the running component. Default is 1.
 	 */
-	public monAPI(boolean buffer) {
+	public monAPI(boolean buffer, int APIKeyId) {
+		String configJson = "";
 		Properties props = System.getProperties();
-		m_apiHost = props.getProperty("SKYSQL_API_HOST", "localhost");
-		m_apiKey = props.getProperty("SKYSQL_API_KEY", "1f8d9e040e65d7b105538b1ed0231770");
-		m_apiKeyID = props.getProperty("SKYSQL_API_KEYID", "1");
+		m_apiHost = props.getProperty("SKYSQL_API_HOST");
+		m_apiKey = props.getProperty("SKYSQL_API_KEY");
+		m_apiKeyID = props.getProperty("SKYSQL_API_KEYID");		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("/usr/local/skysql/config/manager.json"));
+			String tmp;
+			while ( (tmp = reader.readLine()) != null ) {
+				configJson += tmp;
+			}
+			reader.close();
+			GsonConfig gsonConfig = GsonManager.fromJson(configJson, GsonConfig.class);
+			if (m_apiHost == null || m_apiHost.isEmpty()) {
+				m_apiHost = gsonConfig.getUri();
+			}
+			if (m_apiKey == null || m_apiKey.isEmpty()) {
+				m_apiKey = gsonConfig.getKey(APIKeyId);
+			}
+			if (m_apiKeyID == null || m_apiKeyID.isEmpty()) {
+				m_apiKeyID = Integer.toString(APIKeyId);
+			}
+		} catch (Exception e) {
+			Logging.warn("Configuration not found, using system values.");
+			m_apiHost = props.getProperty("SKYSQL_API_HOST", "localhost");
+			m_apiKey = props.getProperty("SKYSQL_API_KEY", "1f8d9e040e65d7b105538b1ed0231770");
+			m_apiKeyID = props.getProperty("SKYSQL_API_KEYID", "1");
+		}
 		m_bufferingExecution = buffer;
 		m_cycles = 0;
 	}
@@ -118,7 +143,7 @@ public class monAPI {
 	public boolean bulkMonitorValue(String apiRequest, String[] fields, String[] values) {
 		return restPost(apiRequest, fields, values);
 	}
-	
+
 	/**
 	 * @deprecated
 	 * API call which requires to modify something. Sends a PUT request.
@@ -135,7 +160,7 @@ public class monAPI {
 		if (result == null) return false;
 		return true;
 	}
-	
+
 	/**
 	 * API call which requires to modify something. Sends a PUT request.
 	 * 
@@ -148,7 +173,7 @@ public class monAPI {
 		String outJson = restPut(restRequest, pName, pValue);
 		return outJson;
 	}
-	
+
 	/**
 	 * Bounce the Json that comes from the API. Only for GET requests.
 	 * This is a convenient call for getReturnedJson(restRequest, pName, pValue, null).
@@ -162,7 +187,7 @@ public class monAPI {
 		String outJson = getReturnedJson(restRequest, pName, pValue, null);
 		return outJson;
 	}
-	
+
 	/**
 	 * Returns the Json that comes from the API. Only for GET requests.
 	 * Sets the If-Modified-Since header, although it does not bounce
@@ -183,7 +208,7 @@ public class monAPI {
 		}
 		return outJson;
 	}
-	
+
 	/**
 	 * Send a GET request to the API and set the If-Modified-Since header.
 	 * The lists of names and values of parameters to be passed to the API
@@ -206,21 +231,21 @@ public class monAPI {
 		}
 		try {
 			// set up authorization
-			String reqString = "http://" + m_apiHost + "/restfulapi/" + restRequest;
+			String reqString = "" + m_apiHost + "/restfulapi/" + restRequest;
 			if (value != "") {
 				reqString += "?" + value;
 			}
 			String rfcdate = setDate();
-		    String sb = this.setAuth(restRequest, rfcdate);
-	        
+			String sb = this.setAuth(restRequest, rfcdate);
+
 			// set up connection
-		    URL postURL = new URL(reqString);
+			URL postURL = new URL(reqString);
 			HttpURLConnection apiConn = (HttpURLConnection) postURL.openConnection();
 			if (lastUpdate != null && lastUpdate != "") {
 				apiConn.setRequestProperty("If-Modified-Since", lastUpdate);
 			}
 			setUpConn(apiConn, sb, rfcdate, value, "GET");
-			
+
 			// get output
 			BufferedReader in = new BufferedReader(new InputStreamReader(apiConn.getInputStream()));
 			String tmp;
@@ -240,7 +265,7 @@ public class monAPI {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Send a PUT request to the API.
 	 * 
@@ -260,7 +285,7 @@ public class monAPI {
 		}
 		try {
 			// set up authorization
-			String reqString = "http://" + m_apiHost + "/restfulapi/" + restRequest;
+			String reqString = "" + m_apiHost + "/restfulapi/" + restRequest;
 			String rfcdate = setDate();
 			String sb = this.setAuth(restRequest, rfcdate);
 
@@ -276,7 +301,7 @@ public class monAPI {
 				result += tmp + "\n";
 			}
 			in.close();
-			
+
 			// run buffer
 			runBuffer();
 
@@ -309,7 +334,7 @@ public class monAPI {
 		}
 		try {
 			// set up authorization for the redirected webpage (ie, $_POST variable)
-			String reqString = "http://" + m_apiHost + "/restfulapi/" + restRequest;
+			String reqString = "" + m_apiHost + "/restfulapi/" + restRequest;
 			String rfcdate = setDate();
 			String sb = this.setAuth(restRequest, rfcdate);
 
@@ -325,7 +350,7 @@ public class monAPI {
 				result += tmp + "\n";
 			}
 			in.close();
-			
+
 			// buffer
 			runBuffer();
 
@@ -339,16 +364,16 @@ public class monAPI {
 		}
 		return true;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * Read the timezone configuration and set the appropriate date format.
 	 * 
@@ -409,7 +434,7 @@ public class monAPI {
 	 * @throws IOException
 	 */
 	private void setUpConn(HttpURLConnection apiConn, String sb, String rfcdate, String value, String method)
-	throws IOException {
+			throws IOException {
 		apiConn.setRequestMethod(method);
 		apiConn.setRequestProperty("Accept", "application/json");
 		apiConn.setRequestProperty("Authorization", "api-auth-" + m_apiKeyID + "-" + sb);
@@ -463,16 +488,16 @@ public class monAPI {
 		}
 		APIBatchExecution.push(toBatch);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * "Singleton" to implement the API buffering mechanism.
 	 * 
@@ -493,7 +518,7 @@ public class monAPI {
 		 * Set a new monAPI instance that will not call the batch queue
 		 * 		(otherwise infinite loop)
 		 */
-		private monAPI mapi = new monAPI(false);
+		private monAPI mapi = new monAPI(false, 1);
 		/**
 		 * Instance of the present class. To be instantiate only once, thus
 		 * keep it private
@@ -531,9 +556,9 @@ public class monAPI {
 		 * Return the whole stack list.
 		 * @return
 		 */
-//		public static List<List<Object>> getExecutionStack() {
-//			return getInstance().stack;
-//		}
+		//		public static List<List<Object>> getExecutionStack() {
+		//			return getInstance().stack;
+		//		}
 		/**
 		 * Push an element, on a LIFO
 		 * @param toBuffer
@@ -551,16 +576,16 @@ public class monAPI {
 		 * Pop on a LIFO
 		 * @return
 		 */
-//		public synchronized static List<Object> pop() {
-//			try {
-//				int lastPos = getInstance().stack.size() -1;
-//				List<Object> result = getInstance().stack.get(lastPos);
-//				getInstance().stack.remove(lastPos);
-//				return result;
-//			} catch (Exception e) {
-//				return null;
-//			}
-//		}
+		//		public synchronized static List<Object> pop() {
+		//			try {
+		//				int lastPos = getInstance().stack.size() -1;
+		//				List<Object> result = getInstance().stack.get(lastPos);
+		//				getInstance().stack.remove(lastPos);
+		//				return result;
+		//			} catch (Exception e) {
+		//				return null;
+		//			}
+		//		}
 		/**
 		 * Execute the buffer queue.
 		 */

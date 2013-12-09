@@ -4,7 +4,7 @@
 	<groupId>com.skysql.java</groupId>
 	<artifactId>libMariaDB-Manager-java</artifactId>
 	<version>0.1</version>
-	<name>SkySQLManager Java Library</name>
+	<name>MariaDB-Manager Java Library</name>
 	<build>
 		<finalName>libMariaDB-Manager-java</finalName>
 		<sourceDirectory>src</sourceDirectory>

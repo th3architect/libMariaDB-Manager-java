@@ -14,7 +14,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-# Copyright 2013 (c) SkySQL Ab
+# Copyright 2013-2014 (c) SkySQL Ab
 #
 # Author: Massimo Siani
 # Date: November 2013
@@ -24,6 +24,10 @@
 
 
 CHANGELOG
+
+* Mon Dec 9 2013 Massimo Siani <massimo.siani@skysql.com>
+- Read the API URI from the config file
+- Read the API key from the key file
 
 * Thu Nov 7 2013 Massimo Siani <massimo.siani@skysql.com>
 - Initial release
