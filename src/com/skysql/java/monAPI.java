@@ -84,16 +84,77 @@ public class monAPI {
 	/**
 	 * Constructs the monAPI instance. This consists of obtaining the information required
 	 * to contact the API. This information is available via Java System Properties.
+	 * Sets the buffering to true by default.
+	 * 
+	 * @param APIKeyID		the API key ID of the running component
+	 */
+	public monAPI(int APIKeyID) {
+		this(true, APIKeyID);
+	}
+	/**
+	 * Constructs the monAPI instance. This consists of obtaining the information required
+	 * to contact the API. This information is available via Java System Properties.
 	 *
 	 * @param buffer		true if buffer is active (default).
 	 * @param APIKeyId		the API key ID of the running component. Default is 1.
 	 */
 	public monAPI(boolean buffer, int APIKeyId) {
-		String configJson = "";
+		getApiCredentials(APIKeyId);
+		m_bufferingExecution = buffer;
+		m_cycles = 0;
+	}
+
+	/**
+	 * Retrieves the API host and ID/key pair according to the following logic.
+	 * If the SKYSQL_API_HOST variable is set, it is used as the host.
+	 * If no such variable is specified, try to look in a configuration file, in json format,
+	 * an object of type GsonConfig which contains the api.uri object. If
+	 * it is still not found, uses localhost.
+	 * Similar considerations hold for SKYSQL_API_KEYID (API ID) and SKYSQL_API_KEY (API key).
+	 * The resulting data is stored as the state of the current instance.
+	 * 
+	 * @param APIKeyId				the API ID to be used if none is provided as system property
+	 */
+	private void getApiCredentials(int APIKeyId) {
 		Properties props = System.getProperties();
 		m_apiHost = props.getProperty("SKYSQL_API_HOST");
 		m_apiKey = props.getProperty("SKYSQL_API_KEY");
-		m_apiKeyID = props.getProperty("SKYSQL_API_KEYID");		
+		m_apiKeyID = props.getProperty("SKYSQL_API_KEYID");
+		if (m_apiKeyID != null && ! m_apiKeyID.isEmpty()) {
+			try {
+				APIKeyId = Integer.parseInt(m_apiKeyID);
+			} catch (Exception e) {
+				Logging.error("The provided API Key ID is invalid. Looking for another value in the configuration files.");
+				m_apiKeyID = null;
+			}
+		}
+		if (isPropertyNullOrEmpty()) {
+			getConfigJson(APIKeyId);
+		}
+		if (isPropertyNullOrEmpty()) {
+			getConfigIni(APIKeyId);
+		}
+		if (isPropertyNullOrEmpty()) {
+			getConfigDefault(APIKeyId);
+		}
+	}
+	/**
+	 * Checks whether any of the system properties in this instance is null or empty.
+	 * @return
+	 */
+	private boolean isPropertyNullOrEmpty() {
+		boolean result = (m_apiHost == null || m_apiHost.isEmpty()
+				|| m_apiKey == null || m_apiKey.isEmpty()
+				|| m_apiKeyID == null || m_apiKeyID.isEmpty());
+		return result;
+	}
+	/**
+	 * If any of the system properties is null or empty, look for the Json configuration file.
+	 * 
+	 * @param APIKeyId				the API ID to be used
+	 */
+	private void getConfigJson(int APIKeyId) {
+		String configJson = "";
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("/usr/local/skysql/config/manager.json"));
 			String tmp;
@@ -112,13 +173,51 @@ public class monAPI {
 				m_apiKeyID = Integer.toString(APIKeyId);
 			}
 		} catch (Exception e) {
-			Logging.warn("Configuration not found, using system values.");
-			m_apiHost = props.getProperty("SKYSQL_API_HOST", "localhost");
-			m_apiKey = props.getProperty("SKYSQL_API_KEY", "1f8d9e040e65d7b105538b1ed0231770");
-			m_apiKeyID = props.getProperty("SKYSQL_API_KEYID", "1");
+			Logging.info("Configuration Json file not found.");
 		}
-		m_bufferingExecution = buffer;
-		m_cycles = 0;
+	}
+	/**
+	 * If any of the system properties is null or empty, look for the ini configuration file.
+	 * 
+	 * @param APIKeyId				the API ID to be used
+	 */
+	private void getConfigIni(int APIKeyId) {
+		try {
+			BufferedReader config = new BufferedReader(new FileReader("/usr/local/skysql/config/components.ini"));
+			String keyString;
+			while ((keyString = config.readLine()) != null) {
+				Pattern p = Pattern.compile("^" + APIKeyId + "\\s*=\\s*\"(\\w+)\"");
+				Matcher m = p.matcher(keyString);
+				if (m.find()) {
+					keyString = m.group(1);
+					break;
+				}
+			}
+			config.close();
+			if (m_apiKey == null || m_apiKey.isEmpty()) {
+				m_apiKey = keyString;
+			}
+			if (m_apiKeyID == null || m_apiKeyID.isEmpty()) {
+				m_apiKeyID = "" + APIKeyId;
+			}
+		} catch (Exception e) {
+			Logging.info("Configuration ini file not found.");
+		}
+	}
+	/**
+	 * Sets the default value for the unset properties. The API ID does not have a default
+	 * value in the current implementation.
+	 */
+	private void getConfigDefault(int APIKeyId) {
+		if (m_apiHost == null || m_apiHost.isEmpty()) {
+			m_apiHost = "http://localhost/restfulapi";
+		}
+		if (m_apiKey == null || m_apiKey.isEmpty()) {
+			m_apiKey = "1f8d9e040e65d7b105538b1ed0231770";
+		}
+		if (m_apiKeyID == null || m_apiKeyID.isEmpty()) {
+			m_apiKeyID = "" + APIKeyId;
+		}
 	}
 	/**
 	 * Populate a monitor value for the system. Sends a POST request.
@@ -231,7 +330,7 @@ public class monAPI {
 		}
 		try {
 			// set up authorization
-			String reqString = "" + m_apiHost + "/restfulapi/" + restRequest;
+			String reqString = "" + m_apiHost + "/" + restRequest;
 			if (value != "") {
 				reqString += "?" + value;
 			}
@@ -285,7 +384,7 @@ public class monAPI {
 		}
 		try {
 			// set up authorization
-			String reqString = "" + m_apiHost + "/restfulapi/" + restRequest;
+			String reqString = "" + m_apiHost + "/" + restRequest;
 			String rfcdate = setDate();
 			String sb = this.setAuth(restRequest, rfcdate);
 
@@ -334,7 +433,7 @@ public class monAPI {
 		}
 		try {
 			// set up authorization for the redirected webpage (ie, $_POST variable)
-			String reqString = "" + m_apiHost + "/restfulapi/" + restRequest;
+			String reqString = "" + m_apiHost + "/" + restRequest;
 			String rfcdate = setDate();
 			String sb = this.setAuth(restRequest, rfcdate);
 
@@ -518,7 +617,7 @@ public class monAPI {
 		 * Set a new monAPI instance that will not call the batch queue
 		 * 		(otherwise infinite loop)
 		 */
-		private monAPI mapi = new monAPI(false, 1);
+		private monAPI mapi = new monAPI(false, 3);
 		/**
 		 * Instance of the present class. To be instantiate only once, thus
 		 * keep it private

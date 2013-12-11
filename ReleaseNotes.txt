@@ -25,6 +25,9 @@
 
 CHANGELOG
 
+* Wed Dec 11 2013 Massimo Siani <massimo.siani@skysql.com>
+- Fix priorities in the properties configuration
+
 * Mon Dec 9 2013 Massimo Siani <massimo.siani@skysql.com>
 - Read the API URI from the config file
 - Read the API key from the key file
