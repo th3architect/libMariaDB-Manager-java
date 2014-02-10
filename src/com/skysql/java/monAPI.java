@@ -1,5 +1,5 @@
 /*
- * This file is distributed as part of the SkySQL Cloud Data Suite.  It is free
+ * This file is distributed as part of MariaDB Enterprise.  It is free
  * software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation,
  * version 2.
@@ -387,12 +387,10 @@ public class monAPI {
 			String reqString = "" + m_apiHost + "/" + restRequest;
 			String rfcdate = setDate();
 			String sb = this.setAuth(restRequest, rfcdate);
-
 			// set up connection
 			URL postURL = new URL(reqString);
 			HttpURLConnection apiConn = (HttpURLConnection) postURL.openConnection();
 			setUpConn(apiConn, sb, rfcdate, value, "PUT");
-
 			// get output
 			BufferedReader in = new BufferedReader(new InputStreamReader(apiConn.getInputStream()));
 			String tmp;
@@ -400,10 +398,8 @@ public class monAPI {
 				result += tmp + "\n";
 			}
 			in.close();
-
 			// run buffer
 			runBuffer();
-
 			if (apiConn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error : "
 						+ apiConn.getResponseMessage() + ": returned data: " + result);
@@ -436,12 +432,10 @@ public class monAPI {
 			String reqString = "" + m_apiHost + "/" + restRequest;
 			String rfcdate = setDate();
 			String sb = this.setAuth(restRequest, rfcdate);
-
 			// set up connection
 			URL postURL = new URL(reqString);
 			HttpURLConnection apiConn = (HttpURLConnection) postURL.openConnection();
 			setUpConn(apiConn, sb, rfcdate, value, "POST");
-
 			// get output
 			BufferedReader in = new BufferedReader(new InputStreamReader(apiConn.getInputStream()));
 			String tmp;
@@ -449,10 +443,8 @@ public class monAPI {
 				result += tmp + "\n";
 			}
 			in.close();
-
 			// buffer
 			runBuffer();
-
 			if (apiConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
 				throw new RuntimeException("Failed : HTTP error : "
 						+ apiConn.getResponseMessage() + ": returned data: " + result);
@@ -537,15 +529,13 @@ public class monAPI {
 		apiConn.setRequestMethod(method);
 		apiConn.setRequestProperty("Accept", "application/json");
 		apiConn.setRequestProperty("Authorization", "api-auth-" + m_apiKeyID + "-" + sb);
-		if (! method.equalsIgnoreCase("PUT")) {
+		if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("POST")) {
 			apiConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		} else {
-			apiConn.setRequestProperty("Content-Type", "text/plain");
 		}
 		apiConn.setRequestProperty("charset", "utf-8");
 		apiConn.setRequestProperty("Date", rfcdate);
 		apiConn.setRequestProperty("Content-Length", "" + Integer.toString(value.getBytes().length));
-		apiConn.setRequestProperty("X-SkySQL-API-Version", "1");
+		apiConn.setRequestProperty("X-SkySQL-API-Version", "1.0");
 		apiConn.setDoOutput(true);
 		apiConn.setUseCaches(false);
 		if ( (!method.equalsIgnoreCase("GET")) && value.length() > 1) {
