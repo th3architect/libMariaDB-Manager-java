@@ -1,6 +1,5 @@
-#  Part of SkySQL Manager API
 #
-# This file is distributed as part of SkySQL Manager.  It is free
+# This file is distributed as part of the MariaDB Enterprise. It is free
 # software: you can redistribute it and/or modify it under the terms of the
 # GNU General Public License as published by the Free Software Foundation,
 # version 2.
@@ -24,6 +23,9 @@
 
 
 CHANGELOG
+
+* Mon Feb 10 2014 Massimo Siani <massimo.siani@skysql.com>
+- Update request headers after API change
 
 * Wed Dec 11 2013 Massimo Siani <massimo.siani@skysql.com>
 - Fix priorities in the properties configuration
