@@ -534,7 +534,7 @@ public class monAPI {
 		apiConn.setRequestProperty("charset", "utf-8");
 		apiConn.setRequestProperty("Date", rfcdate);
 		apiConn.setRequestProperty("Content-Length", "" + Integer.toString(value.getBytes().length));
-		apiConn.setRequestProperty("X-SkySQL-API-Version", "1.0");
+		apiConn.setRequestProperty("X-SkySQL-API-Version", "1.1");
 		apiConn.setDoOutput(true);
 		apiConn.setUseCaches(false);
 		if ( (!method.equalsIgnoreCase("GET")) && value.length() > 1) {
