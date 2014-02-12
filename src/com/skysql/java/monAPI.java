@@ -244,7 +244,6 @@ public class monAPI {
 	}
 
 	/**
-	 * @deprecated
 	 * API call which requires to modify something. Sends a PUT request.
 	 * 
 	 * @param restRequest	the API URI
@@ -252,7 +251,7 @@ public class monAPI {
 	 * @param pValue		the value of the parameter
 	 * @return				true on success, false otherwise
 	 */
-	public boolean UpdateValue(String restRequest, String pName, String pValue) {
+	public boolean updateValue(String restRequest, String pName, String pValue) {
 		String[] newpName = {pName};
 		String[] newpValue = {pValue};
 		String result = updateValue(restRequest, newpName, newpValue);
