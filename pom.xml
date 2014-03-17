@@ -19,8 +19,8 @@ This library is used by the Java components of the MariaDB-Manager family, curre
 	</properties>
 	<licenses>
 		<license>
-			<name>GNU General Public License, Version 2.0</name>
-			<url>http://www.gnu.org/licenses/gpl-2.0.html</url>
+			<name>GNU Lesser General Public License, Version 2.1</name>
+			<url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
