@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Wed Mar 26 2014 Massimo Siani <massimo.siani@skysql.com>
+- Add AboutMe information.
+
 * Thu Mar 13 2014 Massimo Siani <massimo.siani@skysql.com>
 - Switch to LGPL, Version 2.1.
 
