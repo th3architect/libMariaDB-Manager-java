@@ -5,7 +5,7 @@ Priority: optional
 Standards-Version: 3.9.2
 Build-Depends: debhelper (>= 8)
 
-Package: libMariaDB-Manager-java
+Package: libmariadb-manager-java
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, java-1.7.0-openjdk, rsyslog
 Description: MariaDB Manager Java Library

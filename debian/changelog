@@ -1,4 +1,4 @@
-libmariadb-manager-java.spec (0.1-9) UNRELEASED; urgency=low
+libmariadb-manager-java (0.1-9) UNRELEASED; urgency=low
 
   * Initial release. (Closes: #XXXXXX)
 
