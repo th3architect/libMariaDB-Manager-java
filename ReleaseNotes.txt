@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Thu Mar 27 2014 Massimo Siani <massimo.siani@skysql.com>
+- Do not require gpg signature when building.
+
 * Wed Mar 26 2014 Massimo Siani <massimo.siani@skysql.com>
 - Add AboutMe information.
 

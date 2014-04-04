@@ -82,6 +82,7 @@ This library is used by the Java components of the MariaDB-Manager family, curre
 					<outputDirectory>.</outputDirectory>
 				</configuration>
 			</plugin>
+<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -95,6 +96,7 @@ This library is used by the Java components of the MariaDB-Manager family, curre
 					</execution>
 				</executions>
 			</plugin>
+-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
