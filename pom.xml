@@ -133,9 +133,9 @@ This library is used by the Java components of the MariaDB-Manager family, curre
 			<version>2.2.4</version>
 		</dependency>
 		<dependency>
-			<groupId>com.nesscomputing</groupId>
-			<artifactId>ness-syslog4j</artifactId>
-			<version>0.9.47-NESS-8</version>
+			<groupId>org.syslog4j</groupId>
+			<artifactId>syslog4j</artifactId>
+			<version>0.9.30</version>
 		</dependency>
 	</dependencies>
 </project>

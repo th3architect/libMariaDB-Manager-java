@@ -77,7 +77,7 @@ public class GsonLatestObservations {
 		m_monitor = new LinkedHashMap<Integer, GsonMonitorClasses.MonitorClasses>(3);
 		m_systemDates = new LinkedHashMap<Integer, String>(3);
 		m_nodeDates = new LinkedHashMap<Integer, LinkedHashMap<Integer,String>>(3);
-		m_monitorDates = "";
+		m_monitorDates = null;
 		m_standardDate = "Thu, 01 Jan 1970 01:00:00 +0100";
 	}
 
@@ -218,7 +218,7 @@ public class GsonLatestObservations {
 		String result;
 		try {
 			result = m_monitorDates;
-			if (m_monitorDates.isEmpty() || result == null) {
+			if (result == null || result.isEmpty()) {
 				result = m_standardDate;
 			}
 		} catch (Exception e) {

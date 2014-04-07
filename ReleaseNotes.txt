@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Mon Apr 07 2014 Massimo Siani <massimo.siani@skysql.com>
+- Require Java 6 instead of Java 7.
+
 * Thu Mar 27 2014 Massimo Siani <massimo.siani@skysql.com>
 - Do not require gpg signature when building.
 

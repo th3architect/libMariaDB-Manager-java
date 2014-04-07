@@ -21,10 +21,9 @@ package com.skysql.java;
 
 import java.util.Random;
 
-import com.nesscomputing.syslog4j.Syslog;
-import com.nesscomputing.syslog4j.SyslogFacility;
-import com.nesscomputing.syslog4j.SyslogIF;
-import com.nesscomputing.syslog4j.impl.message.modifier.text.PrefixSyslogMessageModifier;
+import org.productivity.java.syslog4j.Syslog;
+import org.productivity.java.syslog4j.SyslogIF;
+import org.productivity.java.syslog4j.impl.message.modifier.text.PrefixSyslogMessageModifier;
 
 /**
  * Class to handle the centralized monitor logging.
@@ -121,7 +120,7 @@ public class Logging {
 	 */
 	private Logging() {
 		m_syslog = Syslog.getInstance(m_protocol);
-		m_syslog.getConfig().setFacility(SyslogFacility.user);
+		m_syslog.getConfig().setFacility("user");
 		m_prefix = "MariaDB-Manager-" + m_component + ": ";
 		Random random = new Random();
 		m_prefix += "[" + random.nextInt(999999) + "] ";

@@ -23,7 +23,7 @@ MariaDB Manager is a tool to manage and monitor a set of MariaDB
 servers using the Galera multi-master replication form Codership.
 This component is the monitor for the MariaDB Manager, it probes
 the databases within control of the system gathering performance
-and statistics data fromt he servers.
+and statistics data from the servers.
 
 %prep
 
