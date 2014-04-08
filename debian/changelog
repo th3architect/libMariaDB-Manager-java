@@ -1,0 +1,5 @@
+libmariadb-manager-java (0.1-9) UNRELEASED; urgency=low
+
+  * Initial release. (Closes: #XXXXXX)
+
+ -- Timofey Turenko <timofey.turenko@skysql.com>  Tue, 11 Mar 2014 22:59:35 +0200
