@@ -26,11 +26,10 @@ package com.skysql.java;
  *
  */
 public class GsonSystemTypes extends GsonErrors {
-	
 	private SystemTypes systemtypes;
 	
 	/**
-	 * @return the systemtypes
+	 * @return the systemtypes field of the JSON
 	 */
 	public SystemTypes getSystemtypes() {
 		return systemtypes;
@@ -38,15 +37,20 @@ public class GsonSystemTypes extends GsonErrors {
 
 	public static class SystemTypes {
 		private String aws, galera;
+		
 		/**
-		 * @return the aws
+		 * AWS is one of the system types supported by this client.
+		 * 
+		 * @return the aws field of the JSON
 		 */
 		public String getAws() {
 			return aws;
 		}
 
 		/**
-		 * @return the galera
+		 * Galera is one of the system types supported by this client.
+		 * 
+		 * @return the galera field of the JSON
 		 */
 		public String getGalera() {
 			return galera;

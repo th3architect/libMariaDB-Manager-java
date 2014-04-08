@@ -24,17 +24,18 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Contains the fields for the node API call.
+ * Contains the fields for the "node" API call.
  * 
  * @author Massimo Siani
  *
  */
 public class GsonNode extends GsonErrors {
+	private final static int ERROR_INT_RETURN = -1;
 	private Nodes node;
 	private List<Nodes> nodes;
 	
 	/**
-	 * Constructor for one node.
+	 * Constructor for one node. Initializes the <code>node</code> field.
 	 * 
 	 * @param node	the node to be included in the object
 	 */
@@ -42,7 +43,7 @@ public class GsonNode extends GsonErrors {
 		this.node = node;
 	}
 	/**
-	 * Constructor for more than a node.
+	 * Constructor for more than a node. Initializes the <code>nodes</code> list field.
 	 * 
 	 * @param nodes	the list of nodes to be included in the object
 	 */
@@ -51,6 +52,9 @@ public class GsonNode extends GsonErrors {
 	}
 	
 	/**
+	 * Gets the <code>node</code> field. Returns <code>null</code> if it was not
+	 * included in the JSON or initialized by the constructor.
+	 * 
 	 * @return the node
 	 */
 	private Nodes getNode() {
@@ -58,7 +62,11 @@ public class GsonNode extends GsonErrors {
 	}
 
 	/**
-	 * @return the nodes
+	 * Gets the <code>nodes</code> field. Returns <code>null</code> if it was not
+	 * included in the JSON or initialized by the constructor.
+	 * 
+	 * @return the nodes in this object as a list. If a single node is retrieved,
+	 * it is wrapped in a list.
 	 */
 	public List<Nodes> getNodes() {
 		if (nodes != null) return nodes;
@@ -70,10 +78,10 @@ public class GsonNode extends GsonErrors {
 		return null;
 	}
 	/**
-	 * Return a single Node object at a given position.
+	 * Returns a single Node object at a given position.
 	 * The first element is at position 0.
 	 * 
-	 * @param index		the position 
+	 * @param index		the position index in the node list
 	 * @return			the corresponding MonitorClass object
 	 */
 	public Nodes getNode(int index) {
@@ -83,6 +91,12 @@ public class GsonNode extends GsonErrors {
 		else return dummy.get(index);
 	}
 
+	/**
+	 * This class contains the information about a node entity.
+	 * 
+	 * @author Massimo Siani
+	 *
+	 */
 	public static class Nodes {
 		private String systemid;
 		private String nodeid;
@@ -105,98 +119,114 @@ public class GsonNode extends GsonErrors {
 		private String taskid;
 		
 		/**
-		 * @return the systemid
+		 * @return the systemid field of the JSON.
+		 * If it cannot be parsed as a number, returns <code>-1</code>.
 		 */
 		public int getSystemId() {
-			return Integer.parseInt(systemid);
+			try {
+				return Integer.parseInt(systemid);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the nodeid
+		 * @return the nodeid field of the JSON.
+		 * If it cannot be parsed as a number, returns <code>-1</code>.
 		 */
 		public int getNodeId() {
-			return Integer.parseInt(nodeid);
+			try {
+				return Integer.parseInt(nodeid);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the name
+		 * @return the name field of the JSON.
 		 */
 		public String getName() {
 			return name;
 		}
 		/**
-		 * @return the state
+		 * @return the state field of the JSON.
 		 */
 		public String getState() {
 			return state;
 		}
 		/**
-		 * @return the hostname
+		 * @return the hostname field of the JSON.
 		 */
 		public String getHostname() {
 			return hostname;
 		}
 		/**
-		 * @return the publicIP
+		 * @return the publicIP field of the JSON.
 		 */
 		public String getPublicIP() {
 			return publicip;
 		}
 		/**
-		 * @return the privateIP
+		 * @return the privateIP field of the JSON.
 		 */
 		public String getPrivateIP() {
 			return privateip;
 		}
 		/**
-		 * @return the port
+		 * @return the port field of the JSON.
 		 */
 		public String getPort() {
 			return port;
 		}
 		/**
-		 * @return the instanceID
+		 * @return the instanceID field of the JSON.
+		 * If it is empty, returns <code>0</code>.
+		 * If it cannot be parsed as a number, returns <code>-1</code>.
 		 */
 		public int getInstanceID() {
 			if (instanceid.isEmpty()) return 0;
-			return Integer.parseInt(instanceid);
+			try {
+				return Integer.parseInt(instanceid);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the dbusername
+		 * @return the dbusername field of the JSON.
 		 */
 		public String getDbUserName() {
 			return dbusername;
 		}
 		/**
-		 * @return the dbpassword
+		 * @return the dbpassword field of the JSON.
 		 */
 		public String getDbPassword() {
 			return dbpassword;
 		}
 		/**
-		 * @return the commands
+		 * @return the commands field of the JSON.
 		 */
 		public List<Commands> getCommands() {
 			return commands;
 		}
 		/**
-		 * @return the monitorlatest
+		 * @return the monitorlatest field of the JSON.
 		 */
 		public GsonSharedMonitorLatest getMonitorLatest() {
 			return monitorlatest;
 		}
 		/**
-		 * @return the lastmonitored
+		 * @return the lastmonitored field of the JSON.
 		 */
 		public String getLastMonitored() {
 			return lastmonitored;
 		}
 		/**
-		 * @return the command
+		 * @return the command field of the JSON.
 		 */
 		public String getCommand() {
 			return command;
 		}
 		/**
-		 * @return the taskid
+		 * @return the taskid field of the JSON.
 		 */
 		public String getTaskId() {
 			return taskid;
@@ -205,7 +235,7 @@ public class GsonNode extends GsonErrors {
 		 * If set, this value overrides the corresponding
 		 * one in the System class.
 		 * 
-		 * @return the repusername
+		 * @return the repusername field of the JSON.
 		 */
 		public String getRepUserName() {
 			return repusername;
@@ -214,7 +244,7 @@ public class GsonNode extends GsonErrors {
 		 * If set, this value overrides the corresponding
 		 * one in the System class.
 		 * 
-		 * @return the reppassword
+		 * @return the reppassword field of the JSON.
 		 */
 		public String getRepPassword() {
 			return reppassword;
@@ -229,6 +259,12 @@ public class GsonNode extends GsonErrors {
 		}
 	}
 	
+	/**
+	 * Sub-object of the Node entity.
+	 * 
+	 * @author Massimo Siani
+	 *
+	 */
 	public static class Commands {
 		private String command;
 		private String description;
@@ -236,25 +272,25 @@ public class GsonNode extends GsonErrors {
 		private String steps;
 		
 		/**
-		 * @return the command
+		 * @return the command field of the JSON.
 		 */
 		public String getCommand() {
 			return command;
 		}
 		/**
-		 * @return the description
+		 * @return the description field of the JSON.
 		 */
 		public String getDescription() {
 			return description;
 		}
 		/**
-		 * @return the icon
+		 * @return the icon field of the JSON.
 		 */
 		public String getIcon() {
 			return icon;
 		}
 		/**
-		 * @return the steps
+		 * @return the steps field of the JSON.
 		 */
 		public String getSteps() {
 			return steps;

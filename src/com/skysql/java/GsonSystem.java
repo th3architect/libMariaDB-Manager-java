@@ -83,7 +83,7 @@ public class GsonSystem extends GsonErrors {
 	}
 	
 	/**
-	 * The system API main subclass. The corresponding Json object
+	 * The system API main subclass. The corresponding JSON object
 	 * is called either systems (if it's a list) or system if it's
 	 * a single object.
 	 * 

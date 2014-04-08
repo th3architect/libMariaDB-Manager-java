@@ -26,7 +26,12 @@ import org.productivity.java.syslog4j.SyslogIF;
 import org.productivity.java.syslog4j.impl.message.modifier.text.PrefixSyslogMessageModifier;
 
 /**
- * Class to handle the centralized monitor logging.
+ * Class to handle the centralized logging.
+ * This class sends messages to the syslog or rsyslog daemon,
+ * with configurable parameters. By default, the syslog daemon
+ * listens on the port 514, udp protocol.
+ * Being a singleton, an application does not need to redefine
+ * its parameters until it shuts down.
  * 
  * @author Massimo Siani
  *
@@ -45,7 +50,7 @@ public class Logging {
 	/** The prefix of every log string. */
 	private String						m_prefix;
 	/** The component that is logging. */
-	private static String				m_component;
+	private static String				m_component = "";
 	
 	/**
 	 * @return	this instance
@@ -64,9 +69,9 @@ public class Logging {
 	}
 	
 	/**
-	 * Set a host different from 127.0.0.1.
+	 * Sets the host. The default value is 127.0.0.1.
 	 * 
-	 * @param host			The log host
+	 * @param host			the log host
 	 * @return				the instance of the class
 	 */
 	public static Logging setHost(String host) {
@@ -76,7 +81,7 @@ public class Logging {
 	}
 
 	/**
-	 * Set a protocol different from the default.
+	 * Sets the protocol. The default value is udp.
 	 * 
 	 * @param protocol		the protocol to set
 	 * @return				the instance of the class
@@ -93,7 +98,7 @@ public class Logging {
 	}
 
 	/**
-	 * Set a port different from 514.
+	 * Sets the port. The default value is 514.
 	 * 
 	 * @param port			the port to set
 	 * @return				the instance of the class
@@ -105,9 +110,11 @@ public class Logging {
 	}
 	
 	/**
-	 * Set the component that is logging.
+	 * Set the component that is logging. The default value is an empty string.
+	 * The string will be part of the prefix string:
+	 * MariaDB-Manager-(component): [random number]
 	 * 
-	 * @param component		The component, ie Monitor, WebUI.
+	 * @param component		the component, ie Monitor, WebUI.
 	 * @return				the instance of the class
 	 */
 	public static Logging setComponent(String component) {
@@ -116,7 +123,7 @@ public class Logging {
 	}
 
 	/**
-	 * Constructor for the class.
+	 * Constructor for the class. Builds the prefix string from the available information.
 	 */
 	private Logging() {
 		m_syslog = Syslog.getInstance(m_protocol);
@@ -129,7 +136,7 @@ public class Logging {
 	}
 	
 	/**
-	 * Log an info.
+	 * Logs with info level.
 	 * 
 	 * @param message		the string that will appear in the log
 	 */
@@ -142,9 +149,9 @@ public class Logging {
 	}
 	
 	/**
-	 * Log with error level.
+	 * Logs with error level.
 	 * 
-	 * @param message
+	 * @param message		the string that will appear in the log
 	 */
 	public static void error(String message) {
 		try {
@@ -153,9 +160,9 @@ public class Logging {
 	}
 	
 	/**
-	 * Log with warning level.
+	 * Logs with warning level.
 	 * 
-	 * @param message
+	 * @param message		the string that will appear in the log
 	 */
 	public static void warn(String message) {
 		try {
@@ -163,9 +170,9 @@ public class Logging {
 		} catch (Exception e) {}
 	}
 	/**
-	 * Log with debug level.
+	 * Logs with debug level.
 	 * 
-	 * @param message
+	 * @param message		the string that will appear in the log
 	 */
 	public static void debug(String message) {
 		try {

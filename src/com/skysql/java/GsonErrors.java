@@ -22,7 +22,10 @@ package com.skysql.java;
 import java.util.List;
 
 /**
- * Class for errors and warnings.
+ * Handles the errors and warnings from the API.
+ * Generally, the classes that handle entities returned by the API
+ * extend this class, so there is no need to redefine
+ * the errors and warnings fields.
  * 
  * @author Massimo Siani
  *
@@ -32,12 +35,18 @@ public class GsonErrors {
 	private List<String> warnings;
 	
 	/**
+	 * Get the errors returned by the API, or <code>null</code>
+	 * if the field is not in the JSON.
+	 * 
 	 * @return the errors
 	 */
 	public List<String> getErrors() {
 		return errors;
 	}
 	/**
+	 * Get the warnings returned by the API, or <code>null</code>
+	 * if the field is not in the JSON.
+	 * 
 	 * @return the warnings
 	 */
 	public List<String> getWarnings() {

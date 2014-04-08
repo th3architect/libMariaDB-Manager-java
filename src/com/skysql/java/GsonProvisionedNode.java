@@ -21,16 +21,32 @@ package com.skysql.java;
 
 import java.util.List;
 
+/**
+ * Handles the response from the provisionednode API.
+ * 
+ * @author Massimo Siani
+ *
+ */
 public class GsonProvisionedNode extends GsonErrors {
+	private final static int ERROR_INT_RETURN = -1;
 	private List<ProvisionedNodes> provisionednodes;
 	
 	/**
-	 * @return the provisionedNodes
+	 * The API returns a list of objects representing the provisioned
+	 * nodes. The list is retrieved by this method.
+	 * 
+	 * @return the list of provisioned nodes objects
 	 */
 	public List<ProvisionedNodes> getProvisionedNodes() {
 		return provisionednodes;
 	}
 
+	/**
+	 * The object that encodes one provisioned node entity.
+	 * 
+	 * @author Massimo Siani
+	 *
+	 */
 	public static class ProvisionedNodes {
 		private String systemid;
 		private String nodeid;
@@ -40,56 +56,70 @@ public class GsonProvisionedNode extends GsonErrors {
 		private String dbusername;
 		private String dbpassword;
 		private String systemtype;
+		
 		/**
-		 * @return the systemid
+		 * @return the systemid field of the JSON
+		 * If it cannot be parsed as an integer, returns <code>-1</code>.
 		 */
 		public Integer getSystemid() {
-			return Integer.parseInt(systemid);
+			try {
+				return Integer.parseInt(systemid);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the nodeid
+		 * @return the nodeid field of the JSON
+		 * If it cannot be parsed as an integer, returns <code>-1</code>.
 		 */
 		public Integer getNodeid() {
-			return Integer.parseInt(nodeid);
+			try {
+				return Integer.parseInt(nodeid);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the name
+		 * @return the name field of the JSON
 		 */
 		public String getName() {
 			return name;
 		}
 		/**
-		 * @return the hostname
+		 * @return the hostname field of the JSON
 		 */
 		public String getHostname() {
 			return hostname;
 		}
 		/**
-		 * @return the privateip
+		 * @return the privateip field of the JSON
 		 */
 		public String getPrivateip() {
 			return privateip;
 		}
 		/**
-		 * @return the dbusername
+		 * @return the dbusername field of the JSON
 		 */
 		public String getDbusername() {
 			return dbusername;
 		}
 		/**
-		 * @return the dbpassword
+		 * @return the dbpassword field of the JSON
 		 */
 		public String getDbpassword() {
 			return dbpassword;
 		}
 		/**
-		 * @return the systemtype
+		 * @return the systemtype field of the JSON
 		 */
 		public String getSystemtype() {
 			return systemtype;
 		}
 	}
 
+	/**
+	 * Constructor. It is empty.
+	 */
 	public GsonProvisionedNode() {}
 
 }

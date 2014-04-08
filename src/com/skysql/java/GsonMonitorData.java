@@ -22,7 +22,7 @@ package com.skysql.java;
 import java.util.List;
 
 /**
- * Monitor data.
+ * The Monitor data entity of the API.
  * 
  * @author Massimo Siani
  *
@@ -32,22 +32,28 @@ public class GsonMonitorData extends GsonErrors {
 	private MonitorData monitor_rawdata;
 	
 	/**
-	 * @return the monitor_data
+	 * The Monitor data object of the API.
+	 * 
+	 * @return the monitor_data object.
 	 */
 	private MonitorData getMonitor_data() {
 		return monitor_data;
 	}
 	/**
-	 * @return the monitor_rawdata
+	 * The Monitor Raw data object of the API.
+	 * 
+	 * @return the monitor_rawdata object.
 	 */
 	private MonitorData getMonitor_rawdata() {
 		return monitor_rawdata;
 	}
 	
 	/**
-	 * Get the instance.
+	 * Returns a <code>monitor_data</code> object if available,
+	 * or a <code>monitor_rawdata</code> object.
+	 * If both of them are <code>null</code>, returns <code>null</code>.
 	 * 
-	 * @return	the MonitorData object, null if not set
+	 * @return	the MonitorData object, <code>null</code> if not set
 	 */
 	public MonitorData getMonitorData() {
 		if (getMonitor_data() != null) return getMonitor_data();
@@ -55,6 +61,12 @@ public class GsonMonitorData extends GsonErrors {
 		else return null;
 	}
 
+	/**
+	 * The class that encodes the monitor_data object.
+	 * 
+	 * @author Massimo Siani
+	 *
+	 */
 	public static class MonitorData {
 		private List<String> timestamp;
 		private List<String> value;

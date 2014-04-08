@@ -22,9 +22,12 @@ package com.skysql.java;
 import com.google.gson.Gson;
 
 /**
- * Class to manage Json strings, from and to Java objects.
+ * Class to manage JSON strings, from and to Java objects.
  * This class requires the definitions of appropriate classes
- * that reflect the Json structure.
+ * that reflect the JSON structure.
+ * If the Java class extends <code>GsonErrors</code>, the
+ * errors and warnings are treated with the help of the
+ * <code>Logging</code> class.
  * 
  * @author Massimo Siani
  *
@@ -37,10 +40,10 @@ public class GsonManager {
 	private static Gson			gson = new Gson();
 
 	/**
-	 * Generate Json from an object.
+	 * Generate a JSON from an object.
 	 * 
 	 * @param obj the object.
-	 * @return the Json string.
+	 * @return the JSON string.
 	 */
 	public static <T> String toJson(T obj) {
 		String result = gson.toJson(obj);
@@ -48,13 +51,14 @@ public class GsonManager {
 	}
 
 	/**
-	 * Convert a Json into a Java object. If the Object class is derived
-	 * from GsonErrors and the object contains errors, this method
-	 * prints the error and/or warning messages on the stderr. 
+	 * Convert a JSON into a Java object. If the Object class is derived
+	 * from <code>GsonErrors</code> and the object contains errors, this method
+	 * prints the error and/or warning messages as defined in the
+	 * <code>Logging.error</code> and <code>Logging.warn</code>. 
 	 * 
-	 * @param inJson the Json as a string.
+	 * @param inJson the JSON as a string.
 	 * @param objClass the class of the object.
-	 * @return the deserialized Json as a Java object.
+	 * @return the deserialized JSON as a Java object.
 	 */
 	public static <T> T fromJson(final String inJson, Class<T> objClass) {
 		try {

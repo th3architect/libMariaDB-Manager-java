@@ -140,8 +140,8 @@ public class GsonNodeStates extends GsonErrors {
 	/**
 	 * Return the node state id that corresponds to the name of the state.
 	 * 
-	 * @param state
-	 * @return
+	 * @param state			the name of the state
+	 * @return				the state id or null if not found
 	 */
 	public Integer getIdFromState(String state) {
 		if (getNodeStates() != null) {

@@ -24,27 +24,32 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Contains the fields for the node API call.
+ * Contains the fields for the "monitorclass" API call.
  * 
  * @author Massimo Siani
  *
  */
 public class GsonMonitorClasses extends GsonErrors {
+	private final static int ERROR_INT_RETURN = -1;
 	private MonitorClasses monitorclass;
 	private List<MonitorClasses> monitorclasses;
 
 	/**
 	 * Constructor.
+	 * This is only necessary to initialize the class with existing data,
+	 * for instance cached data.
 	 * 
-	 * @param monitorClass
+	 * @param monitorClass		a single monitor class object
 	 */
 	public GsonMonitorClasses (MonitorClasses monitorClass) {
 		this.monitorclass = monitorClass;
 	}
 	/**
 	 * Constructor.
+	 * This is only necessary to initialize the class with existing data,
+	 * for instance cached data.
 	 * 
-	 * @param monitorClass
+	 * @param monitorClasses	a list of monitor class objects
 	 */
 	public GsonMonitorClasses (List<MonitorClasses> monitorClasses) {
 		this.monitorclasses = monitorClasses;
@@ -63,7 +68,11 @@ public class GsonMonitorClasses extends GsonErrors {
 		return getMonitorClasses().get(index);
 	}
 	/**
-	 * @return the monitorclasses
+	 * Gets the list of cached monitor classes. If a list exists, called monitorclasses, it is returned.
+	 * If a list does not exist but a single monitor class exists, a list of one element is returned.
+	 * If nothing is set, returns null.
+	 * 
+	 * @return the monitorclasses list, or the monitorclass wrapped in a list, or null
 	 */
 	public List<MonitorClasses> getMonitorClasses() {
 		if (monitorclasses != null) return monitorclasses;
@@ -90,100 +99,120 @@ public class GsonMonitorClasses extends GsonErrors {
 		private String monitorid;
 		
 		/**
-		 * @return the systemtype
+		 * @return the systemtype field of the JSON
 		 */
 		public String getSystemType() {
 			return systemtype;
 		}
 		/**
-		 * @return the monitor
+		 * @return the monitor field of the JSON
 		 */
 		public String getMonitor() {
 			return monitor;
 		}
 		/**
-		 * @return the name
+		 * @return the name field of the JSON
 		 */
 		public String getName() {
 			return name;
 		}
 		/**
-		 * @return the sql
+		 * @return the sql field of the JSON
 		 */
 		public String getSql() {
 			return sql;
 		}
 		/**
-		 * @return the description
+		 * @return the description field of the JSON
 		 */
 		public String getDescription() {
 			return description;
 		}
 		/**
-		 * @return the decimals
+		 * @return the decimals field of the JSON
 		 */
 		public String getDecimals() {
 			return decimals;
 		}
 		/**
-		 * @return the mapping
+		 * @return the mapping field of the JSON
 		 */
 		public String getMapping() {
 			return mapping;
 		}
 		/**
-		 * @return the charttype
+		 * @return the charttype field of the JSON
 		 */
 		public String getChartType() {
 			return charttype;
 		}
 		/**
-		 * @return the delta
+		 * @return the delta field of the JSON, if it can be parsed as an integer value,
+		 * or <code>-1</code>
 		 */
 		public int getDelta() {
-			return Integer.parseInt(delta);
+			try {
+				return Integer.parseInt(delta);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the monitortype
+		 * @return the monitortype field of the JSON
 		 */
 		public String getMonitorType() {
 			return monitortype;
 		}
 		/**
-		 * @return the systemaverage
+		 * @return the systemaverage field of the JSON, if it can be parsed as an integer value,
+		 * or <code>-1</code>
 		 */
 		public int getSystemAverage() {
-			return Integer.parseInt(systemaverage);
+			try {
+				return Integer.parseInt(systemaverage);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the interval
+		 * @return the interval field of the JSON, if it can be parsed as an integer value,
+		 * or <code>-1</code>
 		 */
 		public int getInterval() {
-			return Integer.parseInt(interval);
+			try {
+				return Integer.parseInt(interval);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 		/**
-		 * @return the unit
+		 * @return the unit field of the JSON
 		 */
 		public String getUnit() {
 			return unit;
 		}
 		/**
-		 * @return the monitorid
+		 * @return the monitorid field of the JSON, if it can be parsed as an integer value,
+		 * or <code>-1</code>
 		 */
 		public int getMonitorId() {
-			return Integer.parseInt(monitorid);
+			try {
+				return Integer.parseInt(monitorid);
+			} catch (NumberFormatException nfex) {
+				return ERROR_INT_RETURN;
+			}
 		}
 	}
 	
 	/**
-	 * Constructor.
+	 * Constructor. It is empty.
 	 */
 	public GsonMonitorClasses() {}
 	
 	/**
 	 * Get the list of monitor id's.
 	 * 
-	 * @return a list as described above, or null if no system
+	 * @return a list with the monitor id's, or null if no system
 	 * if defined.
 	 */
 	public List<Integer> getMonitorIdList() {

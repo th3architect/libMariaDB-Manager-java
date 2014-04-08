@@ -20,7 +20,8 @@
 package com.skysql.java;
 
 /**
- * Subclass shared among other Gsons.
+ * Subclass shared among other Gson-* classes.
+ * It encodes the monitor latest object of the API.
  * 
  * @author Massimo Siani
  *

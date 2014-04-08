@@ -20,13 +20,22 @@
 package com.skysql.java;
 
 /**
- * Provides information about the library.
+ * Provides information about the library, such as the
+ * version number, which provides the progressive build number,
+ * and the release number, which identifies the API code
+ * the library is compatible with.
  * 
  * @author Massimo Siani
  *
  */
 public class AboutMe {
+	/**
+	 * The internal version number.
+	 */
 	public final static String		VERSION = "0.1-10";
+	/**
+	 * The MariaDB-Manager release number this library is fully compatible with.
+	 */
 	public final static String		RELEASE = "1.0.2";
 	
 }

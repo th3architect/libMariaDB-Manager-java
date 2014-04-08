@@ -141,7 +141,7 @@ public class monAPI {
 	}
 	/**
 	 * Checks whether any of the system properties in this instance is null or empty.
-	 * @return
+	 * @return		true if any property is null or empty, false otherwise
 	 */
 	private boolean isPropertyNullOrEmpty() {
 		boolean result = (m_apiHost == null || m_apiHost.isEmpty()

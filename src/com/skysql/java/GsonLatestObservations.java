@@ -32,11 +32,12 @@ import com.skysql.java.GsonNode.Nodes;
  * Handle the latest observations for all the Gson objects.
  * Provides methods to save and retrieve the objects and the
  * date when the current instance has last updated them.
+ * This is mainly useful to populate the If-Modified-Since
+ * header and increase efficiency.
  * 
  * @author Massimo Siani
  *
  */
-// TODO: Convert this class to a singleton?
 public class GsonLatestObservations {
 	/**
 	 * The default date to return, if any error occurs.
@@ -69,7 +70,7 @@ public class GsonLatestObservations {
 
 
 	/**
-	 * Constructor for the class.
+	 * Constructor for the class. Initializes the fields.
 	 */
 	public GsonLatestObservations() {
 		m_system = new LinkedHashMap<Integer, GsonSystem.Systems>(3);
@@ -98,7 +99,7 @@ public class GsonLatestObservations {
 	}
 
 	/**
-	 * Get the object that corresponds to a node. The node of is specified by
+	 * Get the object that corresponds to a node. The node is specified by
 	 * the system ID the node belongs to, and the ID of the node itself.
 	 * 
 	 * @param systemID		the ID of the system the node belongs to
@@ -137,7 +138,7 @@ public class GsonLatestObservations {
 	
 	/**
 	 * Get the object that corresponds to the monitor class with given
-	 * monitor ID, if has been cached.
+	 * monitor ID, if it has been cached.
 	 * 
 	 * @param monitorID		the monitor ID
 	 * @return				the object of the monitor, null if not found
@@ -152,7 +153,7 @@ public class GsonLatestObservations {
 	}
 	
 	/**
-	 * Return the object that corresponds to a list of all known monitor classes
+	 * Return the object that corresponds to a list of all known monitor classes.
 	 * 
 	 * @return				the object of the monitor classes, or null
 	 */
@@ -172,7 +173,7 @@ public class GsonLatestObservations {
 	/**
 	 * Get the last time that a system has been updated by this instance.
 	 * The system is identified by its ID. If the ID does not exist or has not been
-	 * saved yet, a date in the past is returned.
+	 * saved yet, the date corresponding to the zero Unix time is returned.
 	 * 
 	 * @param systemID		the ID of the system
 	 * @return				the date when the system has been updated
@@ -189,8 +190,8 @@ public class GsonLatestObservations {
 	/**
 	 * Get the last date when a node has been updated by the instance.
 	 * If the ID of the system or of the node do not exist, or if
-	 * the node does not belong to the given system, the returned
-	 * value is a date in the past.
+	 * the node does not belong to the given system,
+	 * the date corresponding to the zero Unix time is returned
 	 * 
 	 * @param systemID		the ID of the system the node belongs to
 	 * @param nodeID		the ID of the node
@@ -208,10 +209,9 @@ public class GsonLatestObservations {
 	
 	/**
 	 * Get the last time that the monitor list has been updated by this instance.
-	 * If the ID does not exist or has not been
-	 * saved yet, a date in the past is returned.
+	 * If nothing has been saved yet, the date corresponding to the zero Unix
+	 * time is returned.
 	 * 
-	 * @param monitorID		the monitor ID
 	 * @return				the date when the system has been updated
 	 */
 	public String getMonitorUpdateDate () {
@@ -298,7 +298,7 @@ public class GsonLatestObservations {
 	 * Save all the monitors in the object and
 	 * set the current time as the last monitor list update time.
 	 * 
-	 * @param		the monitor class object
+	 * @param monitorObj		the monitor class object
 	 */
 	public void setLastMonitor (GsonMonitorClasses monitorObj) {
 		try {
