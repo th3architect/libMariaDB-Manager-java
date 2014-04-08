@@ -15,7 +15,7 @@ Release: 		%{release}
 Source: 		%{name}-%{version}-%{release}.tar.gz
 Prefix: 		/
 Group: 			Development/Tools
-Requires:		java, rsyslog
+Requires:		java >= 6, rsyslog
 #BuildRequires:		java-1.7.0-openjdk
 
 %description
