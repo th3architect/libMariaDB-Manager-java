@@ -108,10 +108,13 @@ public class monAPI {
 	/**
 	 * Retrieves the API host and ID/key pair according to the following logic.
 	 * If the SKYSQL_API_HOST variable is set, it is used as the host.
-	 * If no such variable is specified, try to look in a configuration file, in json format,
-	 * an object of type GsonConfig which contains the api.uri object. If
-	 * it is still not found, uses localhost.
-	 * Similar considerations hold for SKYSQL_API_KEYID (API ID) and SKYSQL_API_KEY (API key).
+	 * If no such variable is specified, tries to look in the configuration file
+	 * /usr/local/skysql/config/manager.json,
+	 * in JSON format, an object of type GsonConfig which contains the api.uri object.
+	 * If it is still not found, uses localhost.
+	 * Similar considerations hold for SKYSQL_API_KEYID (API ID) and SKYSQL_API_KEY (API key),
+	 * but the configuration file looked for is
+	 * /usr/local/skysql/config/components.ini.
 	 * The resulting data is stored as the state of the current instance.
 	 * 
 	 * @param APIKeyId				the API ID to be used if none is provided as system property
@@ -596,36 +599,36 @@ public class monAPI {
 	private static class APIBatchExecution {
 		/**
 		 * The "stack" contains the failed calls according to the following logic:
-		 * 		(java method, request URI, name of parameters, value of parameters)
+		 * 		(java method, request URI, name of parameters, value of parameters).
 		 */
 		private List<List<Object>> stack = new ArrayList<List<Object>>();
 		/**
-		 * Backup of the stack, for performing operations on the stack
+		 * Backup of the stack, for performing operations on the stack.
 		 */
 		private List<List<Object>> stack_bkp = new ArrayList<List<Object>>();
 		/**
 		 * Set a new monAPI instance that will not call the batch queue
-		 * 		(otherwise infinite loop)
+		 * 		(otherwise infinite loop).
 		 */
 		private monAPI mapi = new monAPI(false, 3);
 		/**
 		 * Instance of the present class. To be instantiate only once, thus
-		 * keep it private
+		 * keep it private.
 		 */
 		private static volatile APIBatchExecution INSTANCE = null;
 		/**
-		 * Constructor, to be kept private (only one stack may exist)
+		 * Constructor, to be kept private (only one stack may exist).
 		 */
 		private APIBatchExecution() {}
 		/**
-		 * Constructor wrapper, for double-checking the INSTANCE uniqueness
+		 * Constructor wrapper, for double-checking the INSTANCE uniqueness.
 		 */
 		private synchronized static void APIBatchExecutionHolder() { 
 			if (INSTANCE == null)
 				INSTANCE = new APIBatchExecution();
 		}
 		/**
-		 * Instantiate the unique instance of this class
+		 * Instantiates the unique instance of this class.
 		 * 
 		 * @return the instantiated INSTANCE
 		 */
@@ -635,21 +638,21 @@ public class monAPI {
 			return INSTANCE;
 		}
 		/**
-		 * Transfer the stack into its backup, and clear the stack
+		 * Transfers the stack into its backup, and clears the stack.
 		 */
 		private void backupBatchQueue() {
 			getInstance().stack_bkp.addAll(getInstance().stack);
 			getInstance().stack.clear();
 		}
 		/**
-		 * Return the whole stack list.
+		 * Returns the whole stack list.
 		 * @return
 		 */
 		//		public static List<List<Object>> getExecutionStack() {
 		//			return getInstance().stack;
 		//		}
 		/**
-		 * Push an element, on a LIFO
+		 * Pushes an element, on a LIFO.
 		 * @param toBuffer
 		 * @return true if succeeds or false on errors
 		 */
@@ -662,7 +665,7 @@ public class monAPI {
 			return true;
 		}
 		/**
-		 * Pop on a LIFO
+		 * Pops on a LIFO.
 		 * @return
 		 */
 		//		public synchronized static List<Object> pop() {
@@ -676,7 +679,7 @@ public class monAPI {
 		//			}
 		//		}
 		/**
-		 * Execute the buffer queue.
+		 * Executes the buffer queue.
 		 */
 		public synchronized static void sendAll() {
 			Method method;

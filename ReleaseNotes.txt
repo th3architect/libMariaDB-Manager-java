@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Wed Apr 09 2014 Massimo Siani <massimo.siani@skysql.com>
+- Some other Javadoc
+
 * Tue Apr 08 2014 Massimo Siani <massimo.siani@skysql.com>
 - Start updating and maintaining the Javadoc to provide a reference guide.
 

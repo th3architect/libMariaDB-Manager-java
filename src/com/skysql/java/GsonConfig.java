@@ -25,7 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Reads the configuration file as a JSON object.
+ * Encodes the necessary configuration for a client to connect to the API.
+ * The api object contains the API URI, trimmed of the / characters,
+ * and a list of the API ID/Key pairs.
  * 
  * @author Massimo Siani
  *
@@ -33,12 +35,21 @@ import java.util.List;
 public class GsonConfig {
 	private ApiConfig			api;
 	
+	/**
+	 * Returns the "root" api object.
+	 * 
+	 * @return		the api object
+	 */
 	private ApiConfig getApiConfig() {
 		return api;
 	}
 	
 	/**
-	 * Main object.
+	 * This is the root object, which contains the
+	 * uri and the list of keys objects. In general, there is no
+	 * need to retrieve this nested class, the objects here can
+	 * be retrieved by the available methods.
+	 * 
 	 * @author Massimo Siani
 	 *
 	 */
@@ -46,17 +57,28 @@ public class GsonConfig {
 		private String			uri;
 		private List<Keys>		keys;
 		
+		/**
+		 * Returns the API URI.
+		 * 
+		 * @return		the API URI
+		 */
 		public String getUri() {
 			return uri;
 		}
 		
+		/**
+		 * Returns the list of API ID/Key pairs.
+		 * 
+		 * @return		the list of key objects
+		 */
 		public List<Keys> getKeys() {
 			return keys;
 		}
 	}
 	
 	/**
-	 * Key object.
+	 * Encodes a single key object.
+	 * 
 	 * @author Massimo Siani
 	 *
 	 */
@@ -64,17 +86,28 @@ public class GsonConfig {
 		private String id;
 		private String code;
 		
+		/**
+		 * Returns the ID of the API ID/key pair.
+		 * 
+		 * @return		the ID of the pair
+		 */
 		public int getId() {
 			return Integer.parseInt(id);
 		}
 		
+		/**
+		 * Returns the key of the API ID/key pair.
+		 * 
+		 * @return		the key of the pair
+		 */
 		public String getCode() {
 			return code;
 		}
 	}
 	
 	/**
-	 * Returns the API URI from the configuration file.
+	 * Returns the API URI.
+	 * 
 	 * @return		the API URI
 	 */
 	public String getUri() {
@@ -84,8 +117,8 @@ public class GsonConfig {
 	
 	/**
 	 * Searches the given API ID in the list of API ID/key pairs, and returns
-	 * the corresponding key. If the id does not exist, returns
-	 * null.
+	 * the corresponding key. If the id does not exist, returns <code>null</code>.
+	 * 
 	 * @param id		the API ID
 	 * @return			the corresponding API key, or null if the ID does not exist
 	 */
@@ -103,8 +136,9 @@ public class GsonConfig {
 	}
 	
 	/**
-	 * Returns the list of defined API IDs.
-	 * @return		the list of defined API IDs
+	 * Returns the list of defined API ID's, or an empty list.
+	 * 
+	 * @return		the list of the defined API IDs
 	 */
 	public List<Integer> getIds() {
 		List<Integer> result = new ArrayList<Integer>();
@@ -117,7 +151,8 @@ public class GsonConfig {
 	}
 	
 	/**
-	 * Returns all the API ID/key pairs.
+	 * Returns all the retrieved API ID/key pairs.
+	 * 
 	 * @return		the API ID/key pairs
 	 */
 	public HashMap<Integer, String> getIdKeyPairs() {
