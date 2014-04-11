@@ -32,6 +32,9 @@ and statistics data from the servers.
 %build
 
 %post
+touch $RPM_BUILD_ROOT/etc/rsyslog.conf
+sed -i -e 's/#$ModLoad imudp/$ModLoad imudp/' -e 's/#$UDPServerRun 514/$UDPServerRun 514/' $RPM_BUILD_ROOT/etc/rsyslog.conf
+/etc/init.d/rsyslog restart
 
 %install
 mkdir -p $RPM_BUILD_ROOT%{install_path}
@@ -43,8 +46,3 @@ cp libMariaDB-Manager-java.jar $RPM_BUILD_ROOT%{install_path}
 %defattr(-,root,root)
 %{install_path}
 %{install_path}libMariaDB-Manager-java.jar
-
-%changelog
-
-* Thu Nov 07 2013 Massimo Siani <massimo.siani@skysql.com> - 0.1
-- Initial commit
