@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
  * @author Mark Riddoch, Massimo Siani
  *
  */
-public class monAPI {
+public class MonAPI {
 	/**
 	 * The host on which the API is running
 	 */
@@ -74,32 +74,32 @@ public class monAPI {
 	private String		m_timeZone = null;
 
 	/**
-	 * Constructs the monAPI instance. This consists of obtaining the information required
+	 * Constructs the MonAPI instance. This consists of obtaining the information required
 	 * to contact the API. This information is available via Java System Properties.
 	 * Sets the buffering to true by default, and the key ID to 1.
 	 */
-	public monAPI()
+	public MonAPI()
 	{
 		this(true, 1);
 	}
 	/**
-	 * Constructs the monAPI instance. This consists of obtaining the information required
+	 * Constructs the MonAPI instance. This consists of obtaining the information required
 	 * to contact the API. This information is available via Java System Properties.
 	 * Sets the buffering to true by default.
 	 * 
 	 * @param APIKeyID		the API key ID of the running component
 	 */
-	public monAPI(int APIKeyID) {
+	public MonAPI(int APIKeyID) {
 		this(true, APIKeyID);
 	}
 	/**
-	 * Constructs the monAPI instance. This consists of obtaining the information required
+	 * Constructs the MonAPI instance. This consists of obtaining the information required
 	 * to contact the API. This information is available via Java System Properties.
 	 *
 	 * @param buffer		true if buffer is active (default).
 	 * @param APIKeyId		the API key ID of the running component. Default is 1.
 	 */
-	public monAPI(boolean buffer, int APIKeyId) {
+	public MonAPI(boolean buffer, int APIKeyId) {
 		getApiCredentials(APIKeyId);
 		m_bufferingExecution = buffer;
 		m_cycles = 0;
@@ -607,10 +607,10 @@ public class monAPI {
 		 */
 		private List<List<Object>> stack_bkp = new ArrayList<List<Object>>();
 		/**
-		 * Set a new monAPI instance that will not call the batch queue
+		 * Set a new MonAPI instance that will not call the batch queue
 		 * 		(otherwise infinite loop).
 		 */
-		private monAPI mapi = new monAPI(false, 3);
+		private MonAPI mapi = new MonAPI(false, 3);
 		/**
 		 * Instance of the present class. To be instantiate only once, thus
 		 * keep it private.

@@ -30,6 +30,10 @@ package com.skysql.java;
  */
 public class AboutMe {
 	/**
+	 * The name of the project.
+	 */
+	public final static String		NAME = "libMariaDB-Manager-Monitor";
+	/**
 	 * The internal version number.
 	 */
 	public final static String		VERSION = "0.1-10";
@@ -37,5 +41,9 @@ public class AboutMe {
 	 * The MariaDB-Manager release number this library is fully compatible with.
 	 */
 	public final static String		RELEASE = "1.0.2";
+	/**
+	 * The date the last change has been applied.
+	 */
+	public final static String		DATE = "Mon, 14 Apr 2014 08:34:11 +0000";
 	
 }
