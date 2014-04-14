@@ -36,7 +36,7 @@ public class AboutMe {
 	/**
 	 * The internal version number.
 	 */
-	public final static String		VERSION = "0.1-10";
+	public final static String		VERSION = "0.1-11";
 	/**
 	 * The MariaDB-Manager release number this library is fully compatible with.
 	 */
@@ -44,6 +44,6 @@ public class AboutMe {
 	/**
 	 * The date the last change has been applied.
 	 */
-	public final static String		DATE = "Mon, 14 Apr 2014 13:27:11 +0000";
+	public final static String		DATE = "Mon, 14 Apr 2014 13:38:23 +0000";
 	
 }

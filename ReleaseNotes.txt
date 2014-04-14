@@ -27,6 +27,7 @@ CHANGELOG
 * Mon Apr 14 2014 Massimo Siani <massimo.siani@skysql.com>
 - Add name and version date in the AboutMe class.
 - Rename monAPI to MonAPI.
+- Move the API client to the Library.
 
 * Fri Apr 11 2014 Massimo Siani <massimo.siani@skysql.com>
 - Manage the rsyslog configuration (debian)
