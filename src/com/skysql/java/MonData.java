@@ -561,7 +561,7 @@ public class MonData {
 	 * @see <code>saveMonitorChanges</code> to store the Monitor metadata
 	 * in the local cache.
 	 * 
-	 * @param id	The Monitor ID
+	 * @param monitor_id	The Monitor ID
 	 * @return The type field for the Monitor, e.g. SQL, CMD, CRM etc.
 	 */
 	public String getMonitorType(int monitor_id)
@@ -576,7 +576,7 @@ public class MonData {
 	 * @see <code>saveMonitorChanges</code> to store the Monitor metadata
 	 * in the local cache.
 	 * 
-	 * @param id	The Monitor ID
+	 * @param monitor_id	The Monitor ID
 	 * @return		True if the system value of a Monitor is an average of all the nodes in the system
 	 */
 	public boolean isMonitorSystemAverage(int monitor_id)
@@ -607,13 +607,13 @@ public class MonData {
 		else return true;
 	}
 	/**
-	 * Retrieve the Monitor key from the Monitor id.
+	 * Retrieve the (unique) Monitor key from the Monitor ID.
 	 * This method does not call the API, but looks in the current cache.
 	 * @see <code>saveMonitorChanges</code> to store the Monitor metadata
 	 * in the local cache.
 	 * 
-	 * @param id
-	 * @return
+	 * @param monitor_id	the Monitor ID
+	 * @return				the Monitor key
 	 */
 	public String getMonitorKey(int monitor_id) {
 		GsonMonitorClasses gsonMonitorClasses = getMonitorClassesCached(monitor_id);
@@ -804,10 +804,15 @@ public class MonData {
 	}
 	/**
 	 * Batch request to the API. Adds the current timestamp to the data being sent, despite
-	 * it is an optional parameter for the API. 
+	 * it is an optional parameter for the API.
+	 * The API only accepts bulk data for one node, with an unlimited number of monitor data.
+	 * However, the API ignores multiple values for the same Monitor.
 	 * 
-	 * @param fields: the names of the variables to be passed to the API
-	 * @param values: the values to the passed to the API
+	 * @param monitorIDs	the ID's of the Monitor
+	 * @param systemID		the ID of the monitored system
+	 * @param nodeID		the ID of the monitored node
+	 * @param values		the values to the passed to the API
+	 * @return		<code>true</code> if the update is performed, <code>false</code> otherwise
 	 */
 	public boolean bulkMonitorData(List<Integer> monitorIDs, Integer systemID, Integer nodeID, List<String> values) {
 		String apiRequest = "monitordata";
@@ -835,10 +840,13 @@ public class MonData {
 		return m_api.bulkMonitorValue(apiRequest, fields, parameters);
 	}
 	/**
-	 * Batch request to the API.
+	 * Batch request to the API. This method is not currently supported by the API.
 	 * 
-	 * @param fields: the names of the variables to be passed to the API
-	 * @param values: the values to the passed to the API
+	 * @param monitorIDs	the ID's of the Monitor
+	 * @param systemIDs		the ID of the monitored system
+	 * @param nodeIDs		the ID of the monitored node
+	 * @param values		the values to the passed to the API
+	 * @return		<code>true</code> if the update is performed, <code>false</code> otherwise
 	 */
 	public boolean bulkMonitorData(List<Integer> monitorIDs, List<Integer> systemIDs, List<Integer> nodeIDs, List<String> values) {
 		String apiRequest = "monitordata";
