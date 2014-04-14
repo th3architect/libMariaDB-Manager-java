@@ -32,7 +32,7 @@ public class AboutMe {
 	/**
 	 * The name of the project.
 	 */
-	public final static String		NAME = "libMariaDB-Manager-Monitor";
+	public final static String		NAME = "libMariaDB-Manager-java";
 	/**
 	 * The internal version number.
 	 */
@@ -44,6 +44,6 @@ public class AboutMe {
 	/**
 	 * The date the last change has been applied.
 	 */
-	public final static String		DATE = "Mon, 14 Apr 2014 08:34:11 +0000";
+	public final static String		DATE = "Mon, 14 Apr 2014 13:27:11 +0000";
 	
 }
