@@ -51,6 +51,9 @@ public class Configuration {
 	 * (section, key, value).
 	 */
 	private Map<String, Map<String, String>>	m_config;
+	/**
+	 * Configuration object. It is similar to a Map<K, V>.
+	 */
 	private Ini						m_ini;
 	
 	/**
@@ -75,18 +78,25 @@ public class Configuration {
 		}
 	}
 	
+	/**
+	 * Constructor that uses the default parameters. The full file name
+	 * of the configuration file is hard coded:
+	 * /usr/local/skysql/config/manager.ini
+	 */
 	public Configuration() {
 		m_config = new HashMap<String, Map<String,String>>();
 		m_filePath = DEFAULT_FILEPATH;
+		reloadFile();
 	}
 
 	/**
-	 * Constructor for this class.
+	 * This constructor allows to set the file name, full path is necessary.
 	 * @param filePath		the full path name of the configuration file
 	 */
 	public Configuration(String filePath) {
 		this();
 		m_filePath = filePath;
+		reloadFile();
 	}
 	
 	/**
