@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
+import org.ini4j.Profile.Section;
 
 /**
  * Loads the configuration from an appropriate configuration file.
@@ -41,6 +42,7 @@ import org.ini4j.InvalidFileFormatException;
  *
  */
 public class Configuration {
+	private final String		DEFAULT_FILEPATH = "/usr/local/skysql/config/manager.ini";
 	/**
 	 * Full path name.
 	 */
@@ -49,6 +51,7 @@ public class Configuration {
 	 * (section, key, value).
 	 */
 	private Map<String, Map<String, String>>	m_config;
+	private Ini						m_ini;
 	
 	/**
 	 * Using this <code>enum</code> instead of explicit
@@ -59,8 +62,9 @@ public class Configuration {
 	public enum DEFAULT_SECTIONS {
 		APIKEYS("apikeys"),
 		APIHOST("apihost"),
-		MONITOR("mariadb-manager-monitor"),
-		WEBUI("mariadb-manager-webui");
+		MONITOR("monitor"),
+		WEBUI("ui"),
+		LOGGING("logging");
 		
 		private final String sectionName;
 		DEFAULT_SECTIONS (String sectionName) {
@@ -70,14 +74,35 @@ public class Configuration {
 			return sectionName;
 		}
 	}
+	
+	public Configuration() {
+		m_config = new HashMap<String, Map<String,String>>();
+		m_filePath = DEFAULT_FILEPATH;
+	}
 
 	/**
 	 * Constructor for this class.
 	 * @param filePath		the full path name of the configuration file
 	 */
 	public Configuration(String filePath) {
+		this();
 		m_filePath = filePath;
-		m_config = new HashMap<String, Map<String,String>>();
+	}
+	
+	/**
+	 * Reloads the configuration file, despite it does not update the
+	 * internal state of the application.
+	 */
+	private void reloadFile() {
+		try {
+			m_ini = new Ini(new File(m_filePath));
+		} catch (InvalidFileFormatException e) {
+			Logging.error(e.getMessage());
+			return;
+		} catch (IOException e) {
+			Logging.error("I/O error while reading file " + m_filePath);
+			return;
+		}
 	}
 	
 	/**
@@ -85,16 +110,23 @@ public class Configuration {
 	 * This is provided to
 	 * avoid having to restart the application each time the
 	 * configuration file changes. The values can be retrieved by
-	 * the getConfig() method.
+	 * the <code>getConfig</code> method.
 	 * @see						getConfig
 	 * @param section			the section in the configuration file to reload
+	 * @param reloadFile		if <code>true</code>, reloads the configuration file
 	 * @throws IOException 
 	 * @throws InvalidFileFormatException 
 	 */
-	public void reload(DEFAULT_SECTIONS section) throws InvalidFileFormatException, IOException {
-		Ini ini = new Ini(new File(m_filePath));
-		Map<String, String> monitorConfig = ini.get(section);
-		m_config.put(section.getSectionName(), monitorConfig);
+	public void reload(DEFAULT_SECTIONS section, boolean reloadFile) {
+		String sectionName = section.getSectionName();
+		if (reloadFile) {
+			reloadFile();
+		}
+		Section sectionConfig = m_ini.get(sectionName);
+		for (String key : sectionConfig.keySet()) {
+			sectionConfig.put(key, validateValue(sectionConfig.get(key)));
+		}
+		m_config.put(sectionName, sectionConfig);
 	}
 	
 	/**
@@ -102,14 +134,14 @@ public class Configuration {
 	 * This is provided to
 	 * avoid having to restart the application each time the
 	 * configuration file changes. The values can be retrieved by
-	 * the getConfig() method.
+	 * the <code>getConfig</code> method.
 	 * @see			getConfig
 	 * @throws InvalidFileFormatException
 	 * @throws IOException
 	 */
-	public void reloadAll() throws InvalidFileFormatException, IOException {
+	public void reloadAll() {
 		for (DEFAULT_SECTIONS section : DEFAULT_SECTIONS.values()) {
-			reload(section);
+			reload(section, false);
 		}
 	}
 	
@@ -128,6 +160,64 @@ public class Configuration {
 	 */
 	public Map<String, String> getConfig(String section) {
 		return m_config.get(section);
+	}
+	
+	/**
+	 * Returns a map of the keys / values within the given section. This method
+	 * guarantees more maintainability when retrieving one the default sections.
+	 * @param section		the section to be retrieved
+	 * @return	a map of the keys / values within the given section
+	 */
+	public Map<String, String> getConfig(DEFAULT_SECTIONS section) {
+		return m_config.get(section.getSectionName());
+	}
+	
+	/**
+	 * The following defines the rules used in the configuration file.
+	 * <p>
+	 * For strings, quotes are optional.
+	 * For numbers, quotes are optional.
+	 * There is no name validation.
+	 * Boolean flags can be turned on using the values 1, On, True or Yes.
+	 * They can be turned off using the values 0, Off, False or No.
+	 * An empty string can be denoted by simply not writing anything after the
+	 * equal sign, or by using the None keyword:
+	 * foo =         ; sets foo to an empty string
+	 * foo = None    ; sets foo to an empty string
+	 * foo = "None"  ; sets foo to the string 'None'
+	 * 
+	 * @param value		the value to be validate with the rules above
+	 */
+	private String validateValue (String value) {
+		String result = "";
+		if ("None".equals(value) || value.isEmpty()) {
+			result = "";
+		} else if (equalsOneOf(value, "On", "True", "Yes")) {
+			result = "true";
+		} else if (equalsOneOf(value, "Off", "False", "No")) {
+			result = "false";
+		} else {
+			result = value.replaceAll("^\"|\"$", "");
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns <code>true</code> if the first parameter matches any of
+	 * the other parameters, <code>false</code> otherwise.
+	 * <p>
+	 * *Case-insensitive*.
+	 * @param value			the parameter that should be checked for matching
+	 * @param strings		the list of values to be compared to <code>value</code>
+	 * @return				<code>true</code> if <code>value</code> matches at least
+	 * one parameter, <code>false</code> otherwise
+	 */
+	private boolean equalsOneOf (String value, String...strings) {
+		boolean result = false;
+		for (String string : strings) {
+			result = result || value.equalsIgnoreCase(string);
+		}
+		return result;
 	}
 
 }

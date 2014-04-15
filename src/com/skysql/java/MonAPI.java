@@ -44,7 +44,8 @@ import java.util.regex.Pattern;
  * This is the API that should be used to store all monitor observations and to retrieve 
  * system configuration information rather than access the SQLite monitoring database directly.
  * 
- * @author Mark Riddoch, Massimo Siani
+ * @author Mark Riddoch
+ * @author Massimo Siani
  *
  */
 public class MonAPI {

@@ -32,7 +32,8 @@ import java.util.regex.Pattern;
  * the definition of what to Monitor and into which the monitored values
  * are written.
  * 
- * @author Mark Riddoch, Massimo Siani
+ * @author Mark Riddoch
+ * @author Massimo Siani
  *
  */
 public class MonData {

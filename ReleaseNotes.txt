@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Tue Apr 15 2014 Massimo Siani <massimo.siani@skysql.com>
+- Continue Configuration class.
+
 * Mon Apr 14 2014 Massimo Siani <massimo.siani@skysql.com>
 - Add name and version date in the AboutMe class.
 - Rename monAPI to MonAPI.

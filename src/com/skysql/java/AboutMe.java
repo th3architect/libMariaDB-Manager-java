@@ -44,6 +44,6 @@ public class AboutMe {
 	/**
 	 * The date the last change has been applied.
 	 */
-	public final static String		DATE = "Mon, 14 Apr 2014 13:38:23 +0000";
+	public final static String		DATE = "Tue, 15 Apr 2014 11:17:57 -0400";
 	
 }
