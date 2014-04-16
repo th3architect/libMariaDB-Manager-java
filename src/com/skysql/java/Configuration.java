@@ -42,7 +42,8 @@ import org.ini4j.Profile.Section;
  *
  */
 public class Configuration {
-	private final String		DEFAULT_FILEPATH = "/usr/local/skysql/config/manager.ini";
+	private final static String		DEFAULT_FILEPATH = "/etc/mariadbmanager/manager.ini";
+	private static DEFAULT_SECTION	RUNNING_APPLICATION = DEFAULT_SECTION.MONITOR;
 	/**
 	 * Full path name.
 	 */
@@ -62,7 +63,7 @@ public class Configuration {
 	 * @author Massimo Siani
 	 *
 	 */
-	public enum DEFAULT_SECTIONS {
+	public enum DEFAULT_SECTION {
 		APIKEYS("apikeys"),
 		APIHOST("apihost"),
 		MONITOR("monitor"),
@@ -70,7 +71,7 @@ public class Configuration {
 		LOGGING("logging");
 		
 		private final String sectionName;
-		DEFAULT_SECTIONS (String sectionName) {
+		DEFAULT_SECTION (String sectionName) {
 			this.sectionName = sectionName;
 		}
 		public String getSectionName () {
@@ -84,9 +85,7 @@ public class Configuration {
 	 * /usr/local/skysql/config/manager.ini
 	 */
 	public Configuration() {
-		m_config = new HashMap<String, Map<String,String>>();
-		m_filePath = DEFAULT_FILEPATH;
-		reloadFile();
+		this(DEFAULT_FILEPATH);
 	}
 
 	/**
@@ -94,9 +93,18 @@ public class Configuration {
 	 * @param filePath		the full path name of the configuration file
 	 */
 	public Configuration(String filePath) {
-		this();
+		m_config = new HashMap<String, Map<String,String>>();
 		m_filePath = filePath;
 		reloadFile();
+		reloadAll();
+	}
+	
+	public static DEFAULT_SECTION getApplication() {
+		return RUNNING_APPLICATION;
+	}
+	
+	public static void setApplication(DEFAULT_SECTION application) {
+		RUNNING_APPLICATION = application;
 	}
 	
 	/**
@@ -127,7 +135,7 @@ public class Configuration {
 	 * @throws IOException 
 	 * @throws InvalidFileFormatException 
 	 */
-	public void reload(DEFAULT_SECTIONS section, boolean reloadFile) {
+	public void reload(DEFAULT_SECTION section, boolean reloadFile) {
 		String sectionName = section.getSectionName();
 		if (reloadFile) {
 			reloadFile();
@@ -150,7 +158,7 @@ public class Configuration {
 	 * @throws IOException
 	 */
 	public void reloadAll() {
-		for (DEFAULT_SECTIONS section : DEFAULT_SECTIONS.values()) {
+		for (DEFAULT_SECTION section : DEFAULT_SECTION.values()) {
 			reload(section, false);
 		}
 	}
@@ -178,7 +186,7 @@ public class Configuration {
 	 * @param section		the section to be retrieved
 	 * @return	a map of the keys / values within the given section
 	 */
-	public Map<String, String> getConfig(DEFAULT_SECTIONS section) {
+	public Map<String, String> getConfig(DEFAULT_SECTION section) {
 		return m_config.get(section.getSectionName());
 	}
 	
@@ -200,7 +208,7 @@ public class Configuration {
 	 */
 	private String validateValue (String value) {
 		String result = "";
-		if ("None".equals(value) || value.isEmpty()) {
+		if ("None".equalsIgnoreCase(value) || value.isEmpty()) {
 			result = "";
 		} else if (equalsOneOf(value, "On", "True", "Yes")) {
 			result = "true";

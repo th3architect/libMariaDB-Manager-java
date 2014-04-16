@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Wed Apr 16 2014 Massimo Siani <massimo.siani@skysql.com>
+- Configuration class ready.
+
 * Tue Apr 15 2014 Massimo Siani <massimo.siani@skysql.com>
 - Continue Configuration class.
 

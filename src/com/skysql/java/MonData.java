@@ -41,7 +41,6 @@ public class MonData {
 	private MonAPI						m_api;
 	private String						m_systemType;
 	private GsonLatestObservations 		m_dataChanged;
-	private final int					m_monitorApiID = 3;
 	
 	/**
 	 * Constructor for the Monitor data class.
@@ -51,7 +50,7 @@ public class MonData {
 	public MonData(int systemID)
 	{
 		m_systemID = systemID;
-		m_api = new MonAPI(m_monitorApiID);
+		m_api = new MonAPI();
 		m_systemType = "galera";
 		m_dataChanged = new GsonLatestObservations();
 	}
