@@ -23,8 +23,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-import org.productivity.java.syslog4j.util.Base64;
-
 /**
  * Provides the means to encrypt data to be sent to the API.
  * 
@@ -47,6 +45,7 @@ public class Encryption {
 		String result = "";
 		Random random = new Random();
 		String salt = "" + random.nextInt(10000000);
+		salt = "" + 10;
 		MessageDigest md;
 		try {
 			md = MessageDigest.getInstance("MD5");
@@ -60,12 +59,13 @@ public class Encryption {
 			string = bitwiseXor(string, salt);
 			string += salt;
 			for(int count = 0; count < string.length(); count++) {
-				char keyChar = key.charAt(count % key.length());
+				int index = (count % key.length()) - 1 < 0 ? key.length()-1 : (count % key.length()) - 1;
+				char keyChar = key.charAt(index);
 				result += (char)((int) (string.charAt(count)) + (int) (keyChar));
 			}
 		} catch (NoSuchAlgorithmException e) {
 		}
-		return Base64.encodeBytes(result.getBytes());
+		return result;
 	}
 
 	/**
@@ -75,10 +75,17 @@ public class Encryption {
 	 */
 	public String decrypt(String encryptedString, String key) {
 		String result = "";
-		String string = new String(Base64.decode(encryptedString));
+		// String string = new String(Base64.decode(encryptedString));
+		String string = encryptedString;
 		for(int count = 0; count < encryptedString.length(); count++) {
-			char keyChar = key.charAt((count % key.length()));
-			result += (char) ((int)(string.charAt(count)) - (int)(keyChar));
+			int index = (count % key.length()) - 1 < 0 ? key.length()-1 : (count % key.length()) - 1;
+			char keyChar = key.charAt(index);
+			int asciiCode = (int)(string.charAt(count)) - (int)(keyChar);
+			asciiCode = asciiCode % 256;
+			if (asciiCode < 0) {
+				asciiCode += 256;
+			}
+			result += (char) (asciiCode);
 		}
 		String salt = result.substring(result.length()-32);
 		return bitwiseXor(result.substring(0, result.length()-32), salt);
@@ -93,7 +100,8 @@ public class Encryption {
 		String result = "";
 		for (int count = 0; count < a.length(); count++) {
 			int asciiValue = (int) (a.charAt(count));
-			char saltChar = b.charAt(count % b.length());
+			int index = (count % b.length()) - 1 < 0 ? b.length()-1 : (count % b.length()) - 1;
+			char saltChar = b.charAt(index);
 			result += Character.toString((char) (asciiValue ^ (int)(saltChar)));
 		}
 		return result;
