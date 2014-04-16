@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Wed Apr 16 2014 Massimo Siani <massimo.siani@skysql.com>
+- First encryption class implementation.
+
 * Mon Apr 14 2014 Massimo Siani <massimo.siani@skysql.com>
 - Add name and version date in the AboutMe class.
 - Rename monAPI to MonAPI.
