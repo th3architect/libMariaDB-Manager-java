@@ -19,9 +19,12 @@
 
 package com.skysql.java;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+
+import org.productivity.java.syslog4j.util.Base64;
 
 /**
  * Provides the means to encrypt data to be sent to the API.
@@ -42,14 +45,12 @@ public class Encryption {
 	 * @return
 	 */
 	public String encrypt(String string, String key) {
-		String result = "";
 		Random random = new Random();
 		String salt = "" + random.nextInt(10000000);
-		salt = "" + 10;
 		MessageDigest md;
 		try {
 			md = MessageDigest.getInstance("MD5");
-			md.update(salt.getBytes());
+			md.update(salt.getBytes("Cp437"));
 			byte byteData[] = md.digest();
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < byteData.length; i++) {
@@ -58,14 +59,20 @@ public class Encryption {
 			salt = sb.toString();
 			string = bitwiseXor(string, salt);
 			string += salt;
+			byte bytes[] = string.getBytes("Cp437");
+			byte out[] = string.getBytes("Cp437");
 			for(int count = 0; count < string.length(); count++) {
 				int index = (count % key.length()) - 1 < 0 ? key.length()-1 : (count % key.length()) - 1;
 				char keyChar = key.charAt(index);
-				result += (char)((int) (string.charAt(count)) + (int) (keyChar));
+				int stringChar = bytes[count] < 0 ? bytes[count] + 256 : bytes[count];
+				out[count] = new Byte((byte) (stringChar + (int)keyChar));
 			}
+			String base64Encoded = Base64.encodeBytes(out);
+			return base64Encoded;
 		} catch (NoSuchAlgorithmException e) {
+		} catch (UnsupportedEncodingException e) {
 		}
-		return result;
+		return "";
 	}
 
 	/**
@@ -75,12 +82,17 @@ public class Encryption {
 	 */
 	public String decrypt(String encryptedString, String key) {
 		String result = "";
-		// String string = new String(Base64.decode(encryptedString));
-		String string = encryptedString;
-		for(int count = 0; count < encryptedString.length(); count++) {
+		String string;
+		byte bytes[];
+		try {
+			string = new String(Base64.decode(encryptedString), "Cp437");
+			bytes = string.getBytes("Cp437");
+		} catch (UnsupportedEncodingException e) {
+			return "";
+		}
+		for(int count = 0; count < string.length(); count++) {
 			int index = (count % key.length()) - 1 < 0 ? key.length()-1 : (count % key.length()) - 1;
-			char keyChar = key.charAt(index);
-			int asciiCode = (int)(string.charAt(count)) - (int)(keyChar);
+			int asciiCode = bytes[count] - (int)(key.charAt(index));
 			asciiCode = asciiCode % 256;
 			if (asciiCode < 0) {
 				asciiCode += 256;
