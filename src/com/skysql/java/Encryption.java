@@ -40,9 +40,12 @@ public class Encryption {
 	public Encryption() {}
 
 	/**
-	 * @param string
-	 * @param key
-	 * @return
+	 * Encrypts the given string using the given key and a (pseudo)random salt.
+	 * Returns the encrypted string or an empty string if the MD5
+	 * algorithm cannot be found at runtime.
+	 * @param string	the string to be encrypted
+	 * @param key		the encryption key
+	 * @return			the encrypted string or an empty string on errors
 	 */
 	public String encrypt(String string, String key) {
 		Random random = new Random();
@@ -76,9 +79,13 @@ public class Encryption {
 	}
 
 	/**
-	 * @param encryptedString
-	 * @param key
-	 * @return
+	 * Decrypts the given string using the given key. This method
+	 * only works with strings encrypted with the <code>encrypt</code>
+	 * method in this class.
+	 * Returns the original string.
+	 * @param encryptedString		the encrypted string
+	 * @param key					the encryption key
+	 * @return						the decrypted original string
 	 */
 	public String decrypt(String encryptedString, String key) {
 		String result = "";
@@ -104,17 +111,25 @@ public class Encryption {
 	}
 
 	/**
-	 * @param a
-	 * @param b
-	 * @return
+	 * Bitwise XOR (<code>^</code>) for Strings.
+	 * The result is given by concatenating the results of
+	 * the following operation
+	 * <p><code>
+	 * (int)(a.charAt[index]) ^ (int)(b.charAt[index-1])
+	 * </code>
+	 * <p> for each character in the string <code>a</code>. Here,
+	 * <code>b.charAt[-1]</code> means <code>b.charAt[b.length()-1]</code>. 
+	 * @param a		the first string
+	 * @param b		the second string
+	 * @return		the <code>a ^ b</code> string
 	 */
 	private String bitwiseXor (String a, String b) {
 		String result = "";
 		for (int count = 0; count < a.length(); count++) {
-			int asciiValue = (int) (a.charAt(count));
+			int aValue = (int) a.charAt(count);
 			int index = (count % b.length()) - 1 < 0 ? b.length()-1 : (count % b.length()) - 1;
-			char saltChar = b.charAt(index);
-			result += Character.toString((char) (asciiValue ^ (int)(saltChar)));
+			int bValue = (int) b.charAt(index);
+			result += Character.toString((char) (aValue ^ bValue));
 		}
 		return result;
 	}	
