@@ -39,12 +39,15 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.skysql.java.Configuration.DEFAULT_SECTION;
+
 /**
  * The interface to the SkySQL Manager API, a REST interface to the monitor database.
  * This is the API that should be used to store all monitor observations and to retrieve 
  * system configuration information rather than access the SQLite monitoring database directly.
  * 
- * @author Mark Riddoch, Massimo Siani
+ * @author Mark Riddoch
+ * @author Massimo Siani
  *
  */
 public class MonAPI {
@@ -133,6 +136,9 @@ public class MonAPI {
 			}
 		}
 		if (isPropertyNullOrEmpty()) {
+			getConfig();
+		}
+		if (isPropertyNullOrEmpty()) {
 			getConfigJson(APIKeyId);
 		}
 		if (isPropertyNullOrEmpty()) {
@@ -151,6 +157,15 @@ public class MonAPI {
 				|| m_apiKey == null || m_apiKey.isEmpty()
 				|| m_apiKeyID == null || m_apiKeyID.isEmpty());
 		return result;
+	}
+	/**
+	 * Retrieves the API ID/key pair from the <code>Configuration</code> class.
+	 */
+	private void getConfig() {
+		Configuration config = new Configuration();
+		m_apiKeyID = config.getConfig(Configuration.getApplication()).get("apikeyid");
+		m_apiKey = config.getConfig(DEFAULT_SECTION.APIKEYS).get(m_apiKeyID);
+		m_apiHost = config.getConfig(DEFAULT_SECTION.APIHOST).get("uri");
 	}
 	/**
 	 * If any of the system properties is null or empty, look for the Json configuration file.

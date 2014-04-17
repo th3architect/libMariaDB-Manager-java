@@ -137,5 +137,10 @@ This library is used by the Java components of the MariaDB-Manager family, curre
 			<artifactId>syslog4j</artifactId>
 			<version>0.9.30</version>
 		</dependency>
+		<dependency>
+			<groupId>org.ini4j</groupId>
+			<artifactId>ini4j</artifactId>
+			<version>0.5.2</version>
+		</dependency>
 	</dependencies>
 </project>

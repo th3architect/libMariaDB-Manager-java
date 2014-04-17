@@ -24,14 +24,24 @@
 
 CHANGELOG
 
+* Thu Apr 17 2014 Massimo Siani <massimo.siani@skysql.com>
+- Fix Encryption class.
+- Add test case for the Encryption class.
+- Fix some Javadoc.
+
 * Wed Apr 16 2014 Massimo Siani <massimo.siani@skysql.com>
 - First encryption class implementation.
+- Configuration class ready.
+
+* Tue Apr 15 2014 Massimo Siani <massimo.siani@skysql.com>
+- Continue Configuration class.
 
 * Mon Apr 14 2014 Massimo Siani <massimo.siani@skysql.com>
 - Add name and version date in the AboutMe class.
 - Rename monAPI to MonAPI.
 - Move the API client to the Library.
 - Some Javadoc fix.
+- Start Configuration file parsing.
 
 * Fri Apr 11 2014 Massimo Siani <massimo.siani@skysql.com>
 - Manage the rsyslog configuration (debian)

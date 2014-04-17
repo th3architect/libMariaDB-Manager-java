@@ -1,17 +1,18 @@
 /*
- * This file is distributed as part of the MariaDB Manager.  It is free
- * software: you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * version 2.
+ * This file is distributed as part of the MariaDB Manager. It is free
+ * software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Copyright 2012-2014 SkySQL Corporation Ab
  */
@@ -31,7 +32,8 @@ import java.util.regex.Pattern;
  * the definition of what to Monitor and into which the monitored values
  * are written.
  * 
- * @author Mark Riddoch, Massimo Siani
+ * @author Mark Riddoch
+ * @author Massimo Siani
  *
  */
 public class MonData {
@@ -39,7 +41,6 @@ public class MonData {
 	private MonAPI						m_api;
 	private String						m_systemType;
 	private GsonLatestObservations 		m_dataChanged;
-	private final int					m_monitorApiID = 3;
 	
 	/**
 	 * Constructor for the Monitor data class.
@@ -49,7 +50,7 @@ public class MonData {
 	public MonData(int systemID)
 	{
 		m_systemID = systemID;
-		m_api = new MonAPI(m_monitorApiID);
+		m_api = new MonAPI();
 		m_systemType = "galera";
 		m_dataChanged = new GsonLatestObservations();
 	}
