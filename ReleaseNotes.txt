@@ -24,6 +24,9 @@
 
 CHANGELOG
 
+* Wed Apr 23 2014 Massimo Siani <massimo.siani@skysql.com>
+- Created release-1.0.2 branch
+
 * Thu Apr 17 2014 Massimo Siani <massimo.siani@skysql.com>
 - Fix Encryption class.
 - Add test case for the Encryption class.
