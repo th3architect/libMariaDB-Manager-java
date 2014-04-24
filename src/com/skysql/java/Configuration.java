@@ -67,8 +67,7 @@ public class Configuration {
 		APIKEYS("apikeys"),
 		APIHOST("apihost"),
 		MONITOR("monitor"),
-		WEBUI("ui"),
-		LOGGING("logging");
+		WEBUI("ui");
 		
 		private final String sectionName;
 		DEFAULT_SECTION (String sectionName) {
@@ -112,6 +111,7 @@ public class Configuration {
 	 * internal state of the application.
 	 */
 	private void reloadFile() {
+		Logging.info("Loading configuration file " + m_filePath);
 		try {
 			m_ini = new Ini(new File(m_filePath));
 		} catch (InvalidFileFormatException e) {
@@ -137,10 +137,15 @@ public class Configuration {
 	 */
 	public void reload(DEFAULT_SECTION section, boolean reloadFile) {
 		String sectionName = section.getSectionName();
+		Logging.info("Loading configuration section [" + sectionName + "]");
 		if (reloadFile) {
 			reloadFile();
 		}
 		Section sectionConfig = m_ini.get(sectionName);
+		if (sectionConfig == null) {
+			Logging.info("Section " + sectionName + " not found");
+			return;
+		}
 		for (String key : sectionConfig.keySet()) {
 			sectionConfig.put(key, validateValue(sectionConfig.get(key)));
 		}
