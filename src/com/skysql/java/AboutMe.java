@@ -15,6 +15,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Copyright 2014 SkySQL Corporation Ab
+ * 
+ * Author: Massimo Siani
+ * Date: March 2013
  */
 
 package com.skysql.java;
@@ -44,6 +47,6 @@ public class AboutMe {
 	/**
 	 * The date the last change has been applied.
 	 */
-	public final static String		DATE = "Thu, 24 Apr 2014 06:52:03 -0400";
+	public final static String		DATE = "Mon, 28 Apr 2014 06:36:00 -0400";
 	
 }
