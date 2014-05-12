@@ -84,7 +84,7 @@ public class Logging {
 	}
 
 	/**
-	 * Sets the protocol. The default value is udp.
+	 * Sets the protocol. The default value is the Unix socket.
 	 * 
 	 * @param protocol		the protocol to set
 	 * @return				the instance of the class
