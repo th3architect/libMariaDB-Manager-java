@@ -15,7 +15,7 @@ Release: 		%{release}
 Source: 		%{name}-%{version}-%{release}.tar.gz
 Prefix: 		/
 Group: 			Development/Tools
-Requires:		java >= 6, rsyslog
+Requires:		java >= 6
 #BuildRequires:		java-1.7.0-openjdk
 
 %description
@@ -32,9 +32,6 @@ and statistics data from the servers.
 %build
 
 %post
-touch $RPM_BUILD_ROOT/etc/rsyslog.conf
-sed -i -e 's/#$ModLoad imudp/$ModLoad imudp/' -e 's/#$UDPServerRun 514/$UDPServerRun 514/' $RPM_BUILD_ROOT/etc/rsyslog.conf
-/etc/init.d/rsyslog restart
 
 %install
 mkdir -p $RPM_BUILD_ROOT%{install_path}

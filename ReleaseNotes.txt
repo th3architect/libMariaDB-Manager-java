@@ -25,10 +25,11 @@
 CHANGELOG
 
 * Mon May 12 2014 Massimo Siani <massimo.siani@skysql.com>
-- Add JNA to allow the Unix syslog protocol for logging
+- Add JNA to allow the Unix syslog protocol for logging.
+- Use Unix Socket protocol by default for logging.
 
 * Mon Apr 28 2014 Massimo Siani <massimo.siani@skysql.com>
-- Small fixes
+- Small fixes.
 
 * Thu Apr 24 2014 Massimo Siani <massimo.siani@skysql.com>
 - Improve logging and fix NullPointerException

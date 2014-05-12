@@ -47,7 +47,7 @@ public class Logging {
 	/** Host that runs the syslog daemon. */
 	private static String				m_host = "127.0.0.1";
 	/** Syslog protocol. */
-	private String						m_protocol = Syslog.UDP;
+	private String						m_protocol = Syslog.UNIX_SOCKET;
 	/** Syslog port. */
 	private static int					m_port = 514;
 	/** The prefix of every log string. */
