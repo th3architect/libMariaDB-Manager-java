@@ -142,5 +142,10 @@ This library is used by the Java components of the MariaDB-Manager family, curre
 			<artifactId>ini4j</artifactId>
 			<version>0.5.2</version>
 		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.1.0</version>
+		</dependency>
 	</dependencies>
 </project>

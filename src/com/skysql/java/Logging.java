@@ -47,7 +47,7 @@ public class Logging {
 	/** Host that runs the syslog daemon. */
 	private static String				m_host = "127.0.0.1";
 	/** Syslog protocol. */
-	private String						m_protocol = "udp";
+	private String						m_protocol = Syslog.UDP;
 	/** Syslog port. */
 	private static int					m_port = 514;
 	/** The prefix of every log string. */
@@ -133,8 +133,9 @@ public class Logging {
 		m_syslog.getConfig().setFacility("user");
 		m_prefix = "MariaDB-Manager-" + m_component + ": ";
 		Random random = new Random();
-		m_prefix += "[" + random.nextInt(999999) + "] ";
+		m_prefix += "[" + random.nextInt(999999) + "]";
 		PrefixSyslogMessageModifier prefixModifier = new PrefixSyslogMessageModifier(m_prefix);
+		m_syslog.getConfig().removeAllMessageModifiers();
 		m_syslog.getConfig().addMessageModifier(prefixModifier);
 	}
 	
