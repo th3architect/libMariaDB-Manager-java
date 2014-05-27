@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.skysql.java</groupId>
 	<artifactId>libMariaDB-Manager-java</artifactId>
-	<version>0.1</version>
+	<version>0.5</version>
 	<packaging>jar</packaging>
 	<name>MariaDB-Manager Java Library</name>
 	<description>Common Java library for the components of MariaDB-Manager.
